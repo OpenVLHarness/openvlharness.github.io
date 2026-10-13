@@ -16,7 +16,7 @@ JS_OUT = os.path.join(SITE, 'static/js/examples.js')
 MAXDIM = 1000
 
 MODEL = {'GPT-6-Sol': 'GPT-6 Sol', 'GPT-6-Luna': 'GPT-6 Luna', 'Qwen3-VL-32B': 'Qwen3-VL-32B'}
-DATASET = {'V-star': 'V*', 'OdinW-13-PascalVOC': 'OdinW-13'}
+DATASET = {'V-star': 'V*', 'OdinW-13-PascalVOC': 'OdinW-13-All'}
 DOMAIN = {'counting': 'count', 'grounding': 'count', 'counting-grounding': 'count', 'search': 'search', 'vqa': 'vqa', 'spatial': 'spatial'}
 TOOL = {
     'Visual_Grounding_Tool': 'grounding', 'Zoom_In_Tool': 'zoom', 'OCR_Tool': 'ocr', 'Depth_Estimation_Tool': 'depth',

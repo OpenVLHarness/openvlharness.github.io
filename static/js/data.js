@@ -3,7 +3,7 @@
    Table 8 (training-based baselines), Table 12 (reasoning effort), Table 20 (remedy channels). */
 window.OVH = (function () {
   const DOMAINS = [
-    { name: 'Counting & Grounding', short: 'Count & Ground', rows: ['CountQA', 'FSC-147', 'OdinW-13', 'FSCD-147', 'FSCD-LVIS'] },
+    { name: 'Counting & Grounding', short: 'Count & Ground', rows: ['CountQA', 'FSC-147', 'OdinW-13-All', 'FSCD-147', 'FSCD-LVIS'] },
     { name: 'Visual Search & Deep Research', short: 'Search', rows: ['MMSearch', 'MMSearch-Plus', 'RealX-Bench', 'FVQA', 'HLE-VL', 'BC-VL'] },
     { name: 'General VQA & Hallucination', short: 'General VQA', rows: ['RealWorldQA', 'SimpleVQA', 'HallusionBench', 'FREAK-VQA', 'FREAK-MCQ', 'V*'] },
     { name: 'Spatial Understanding', short: 'Spatial', rows: ['MMSI-Bench', 'ERQA', 'EmbSpatial', 'SparBench', 'MindCube'] },
@@ -24,7 +24,7 @@ window.OVH = (function () {
   const RAW = `
 CountQA|32.00 29.06 19.83 48.56|44.70 41.75 32.85 64.14|54.40 47.51 49.87 64.00|73.00 76.00|38.48 58.70|71.27 73.10|82.00 86.40
 FSC-147|15.32 11.26 9.41 37.71|18.97 12.44 12.35 39.42|28.69 27.84 25.74 40.82|38.72 44.40|22.16 42.92|36.78 42.07|44.01 46.11
-OdinW-13|39.80 24.60 31.77 50.40|42.39 44.33 36.10 59.13|33.76 37.76 33.78 54.46|40.86 57.88|46.27 63.12|44.35 56.91|50.46 60.45
+OdinW-13-All|39.80 24.60 31.77 50.40|42.39 44.33 36.10 59.13|33.76 37.76 33.78 54.46|40.86 57.88|46.27 63.12|44.35 56.91|50.46 60.45
 FSCD-147|1.79 0.93 1.41 23.52|2.88 2.55 2.30 28.45|5.56 7.07 4.33 25.61|8.36 29.42|0.16 28.09|7.88 29.11|15.49 30.33
 FSCD-LVIS|1.47 1.36 2.49 27.37|1.79 3.91 4.57 31.63|2.95 5.84 2.90 28.96|5.17 35.22|2.04 33.22|7.15 33.60|10.55 36.02
 MMSearch|14.04 9.94 14.62 51.46|20.47 18.13 18.71 62.57|40.94 31.58 33.92 68.42|55.56 77.78|36.84 56.14|67.25 86.55|57.31 74.27
