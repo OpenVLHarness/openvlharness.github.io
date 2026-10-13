@@ -1,9 +1,9 @@
 /* All numbers transcribed from the paper.
-   Table 1 (Qwen3-VL, GPT-6 Luna/Astra), Table 6 (GPT-5, GPT-6 Sol, Kimi K3), Table 2 (ablation),
+   Table 1 (Qwen3-VL, GPT-6 Luna/Astra), Table 6 (GPT-5, GPT-6 Sol, Kimi K3); 22 datasets, Table 2 (ablation),
    Table 8 (training-based baselines), Table 12 (reasoning effort), Table 20 (remedy channels). */
 window.OVH = (function () {
   const DOMAINS = [
-    { name: 'Counting & Grounding', short: 'Count & Ground', rows: ['FSC-147', 'CountQA', 'PixmoCount', 'OdinW-13', 'FSCD-147', 'FSCD-LVIS'] },
+    { name: 'Counting & Grounding', short: 'Count & Ground', rows: ['CountQA', 'FSC-147', 'OdinW-13', 'FSCD-147', 'FSCD-LVIS'] },
     { name: 'Visual Search & Deep Research', short: 'Search', rows: ['MMSearch', 'MMSearch-Plus', 'RealX-Bench', 'FVQA', 'HLE-VL', 'BC-VL'] },
     { name: 'General VQA & Hallucination', short: 'General VQA', rows: ['RealWorldQA', 'SimpleVQA', 'HallusionBench', 'FREAK-VQA', 'FREAK-MCQ', 'V*'] },
     { name: 'Spatial Understanding', short: 'Spatial', rows: ['MMSI-Bench', 'ERQA', 'EmbSpatial', 'SparBench', 'MindCube'] },
@@ -22,9 +22,8 @@ window.OVH = (function () {
 
   // Raw strings keep the paper's precision. Order: q8(4) q32(4) luna(4) sol(2) gpt5(2) kimi(2) astra(2)
   const RAW = `
-FSC-147|15.32 11.26 9.41 37.71|18.97 12.44 12.35 39.42|28.69 27.84 25.74 40.82|38.72 44.40|22.16 42.92|36.78 42.07|44.01 46.11
 CountQA|32.00 29.06 19.83 48.56|44.70 41.75 32.85 64.14|54.40 47.51 49.87 64.00|73.00 76.00|38.48 58.70|71.27 73.10|82.00 86.40
-PixmoCount|74.53 66.60 68.69 85.21|79.59 78.75 75.33 87.64|78.65 82.96 78.46 89.70|89.14 91.20|76.03 90.07|91.39 90.45|83.71 85.02
+FSC-147|15.32 11.26 9.41 37.71|18.97 12.44 12.35 39.42|28.69 27.84 25.74 40.82|38.72 44.40|22.16 42.92|36.78 42.07|44.01 46.11
 OdinW-13|39.80 24.60 31.77 50.40|42.39 44.33 36.10 59.13|33.76 37.76 33.78 54.46|40.86 57.88|46.27 63.12|44.35 56.91|50.46 60.45
 FSCD-147|1.79 0.93 1.41 23.52|2.88 2.55 2.30 28.45|5.56 7.07 4.33 25.61|8.36 29.42|0.16 28.09|7.88 29.11|15.49 30.33
 FSCD-LVIS|1.47 1.36 2.49 27.37|1.79 3.91 4.57 31.63|2.95 5.84 2.90 28.96|5.17 35.22|2.04 33.22|7.15 33.60|10.55 36.02
@@ -45,7 +44,7 @@ ERQA|44.00 41.25 35.50 43.00|44.75 46.25 48.25 48.00|55.25 57.50 51.50 58.50|66.
 EmbSpatial|78.37 73.71 75.74 78.90|80.54 76.15 78.98 80.00|70.82 73.52 68.19 74.59|80.60 82.53|81.29 82.47|83.7 83.9|82.99 85.14
 SparBench|39.55 38.32 34.63 43.73|46.98 45.29 44.69 46.76|45.51 43.66 44.32 55.29|55.36 62.66|50.12 60.09|60.5 63.8|63.68 68.17
 MindCube|28.36 39.71 41.44 55.48|32.40 45.96 44.13 60.19|57.50 53.65 57.69 70.96|67.40 83.17|60.09 80.00|83.8 89.6|87.79 93.65
-Average|35.99 33.31 32.15 47.14|40.10 38.61 37.66 52.51|43.18 42.78 41.46 55.76|54.26 65.48|45.74 57.15|57.95 67.15|61.28 70.82`;
+Average|34.24 31.80 30.49 45.41|38.30 36.79 35.95 50.92|41.56 40.95 39.78 54.22|52.67 64.31|44.37 55.65|56.43 66.09|60.27 70.17`;
 
   const TABLE = {}; // TABLE[dataset][groupId][method] = {s: "37.71", v: 37.71}
   RAW.trim().split('\n').forEach(line => {
@@ -59,31 +58,31 @@ Average|35.99 33.31 32.15 47.14|40.10 38.61 37.66 52.51|43.18 42.78 41.46 55.76|
     });
   });
 
-  // Hero bar chart: averages over 23 benchmarks
+  // Hero bar chart: averages over 22 benchmarks
   const BACKBONES = ['q8', 'q32', 'kimi', 'luna', 'sol', 'astra'].map(id => {
     const g = GROUPS.find(x => x.id === id);
     return { id, name: g.name, base: TABLE.Average[id].Base.v, ours: TABLE.Average[id].Ours.v };
   });
 
-  // Table 12: GPT-6 Luna, 12 datasets, reasoning effort medium/high/xhigh/max
+  // Table 12: GPT-6 Luna, 11 datasets, reasoning effort medium/high/xhigh/max
   const EFFORTS = ['medium', 'high', 'xhigh', 'max'];
   const EFFORT = [
-    { key: 'base', name: 'GPT-6 Luna', color: '--s-base', score: [49.65, 50.62, 55.31, 58.31], cost: [0.62, 0.89, 1.16, 2.92] },
-    { key: 'codex', name: '+ Codex', color: '--s-codex', score: [48.06, 52.96, 55.77, 57.43], cost: [1.33, 1.47, 1.62, 2.48] },
-    { key: 'vs', name: '+ Visual Sketchpad', color: '--s-vs', score: [55.62, 55.49, 56.36, 58.47], cost: [1.78, 2.09, 2.45, 4.28] },
-    { key: 'ours', name: '+ OpenVLHarness', color: '--s-ours', score: [62.89, 66.57, 67.00, 68.63], cost: [0.94, 1.14, 1.39, 2.45] },
+    { key: 'base', name: 'GPT-6 Luna', color: '--s-base', score: [47.01, 48.01, 52.83, 55.87], cost: [0.65, 0.94, 1.24, 3.14] },
+    { key: 'codex', name: '+ Codex', color: '--s-codex', score: [45.32, 50.57, 53.37, 55.01], cost: [1.34, 1.50, 1.66, 2.59] },
+    { key: 'vs', name: '+ Visual Sketchpad', color: '--s-vs', score: [52.73, 52.48, 53.49, 55.69], cost: [1.84, 2.17, 2.56, 4.53] },
+    { key: 'ours', name: '+ OpenVLHarness', color: '--s-ours', score: [60.43, 64.66, 64.98, 66.76], cost: [0.97, 1.18, 1.45, 2.59] },
   ];
 
   // Harness comparisons (Table 1 averages + Table 8)
   const HARNESS = [
-    { id: 'q8', label: 'Qwen3-VL-8B', note: 'Training-free harnesses, same backbone. 23 benchmarks, mean of three runs.',
-      bars: [['Base (no tools)', 35.99, '--s-base'], ['OctoTools', 33.31, '--s-octo'], ['Visual Sketchpad', 32.15, '--s-vs'], ['OpenVLHarness', 47.14, '--s-ours']] },
-    { id: 'q32', label: 'Qwen3-VL-32B', note: 'Training-free harnesses, same backbone. 23 benchmarks, mean of three runs.',
-      bars: [['Base (no tools)', 40.10, '--s-base'], ['OctoTools', 38.61, '--s-octo'], ['Visual Sketchpad', 37.66, '--s-vs'], ['OpenVLHarness', 52.51, '--s-ours']] },
-    { id: 'luna', label: 'GPT-6 Luna', note: 'Codex: code mode, web search disabled. 23 benchmarks, single run.',
-      bars: [['Base (no tools)', 43.18, '--s-base'], ['Visual Sketchpad', 42.78, '--s-vs'], ['Codex', 41.46, '--s-codex'], ['OpenVLHarness', 55.76, '--s-ours']] },
-    { id: 'q25', label: 'Qwen2.5-VL-7B (training-based)', note: 'AdaReasoner, PixelReasoner and DeepEyesV2 fine-tune the backbone; OpenVLHarness uses the original weights. 23 benchmarks.',
-      bars: [['AdaReasoner', 27.54, '--s-other', 'fine-tuned'], ['PixelReasoner', 29.34, '--s-other', 'fine-tuned'], ['DeepEyesV2', 26.66, '--s-other', 'fine-tuned'], ['OpenVLHarness', 35.58, '--s-ours', 'training-free']] },
+    { id: 'q8', label: 'Qwen3-VL-8B', note: 'Training-free harnesses, same backbone. 22 benchmarks, mean of three runs.',
+      bars: [['Base (no tools)', 34.24, '--s-base'], ['OctoTools', 31.80, '--s-octo'], ['Visual Sketchpad', 30.49, '--s-vs'], ['OpenVLHarness', 45.41, '--s-ours']] },
+    { id: 'q32', label: 'Qwen3-VL-32B', note: 'Training-free harnesses, same backbone. 22 benchmarks, mean of three runs.',
+      bars: [['Base (no tools)', 38.30, '--s-base'], ['OctoTools', 36.79, '--s-octo'], ['Visual Sketchpad', 35.95, '--s-vs'], ['OpenVLHarness', 50.92, '--s-ours']] },
+    { id: 'luna', label: 'GPT-6 Luna', note: 'Codex: code mode, web search disabled. 22 benchmarks, single run.',
+      bars: [['Base (no tools)', 41.56, '--s-base'], ['Visual Sketchpad', 40.95, '--s-vs'], ['Codex', 39.78, '--s-codex'], ['OpenVLHarness', 54.22, '--s-ours']] },
+    { id: 'q25', label: 'Qwen2.5-VL-7B (training-based)', note: 'AdaReasoner, PixelReasoner and DeepEyesV2 fine-tune the backbone; OpenVLHarness uses the original weights. 22 benchmarks.',
+      bars: [['AdaReasoner', 25.29, '--s-other', 'fine-tuned'], ['PixelReasoner', 28.02, '--s-other', 'fine-tuned'], ['DeepEyesV2', 25.02, '--s-other', 'fine-tuned'], ['OpenVLHarness', 33.45, '--s-ours', 'training-free']] },
   ];
 
   // Table 2 ablation
@@ -101,8 +100,8 @@ Average|35.99 33.31 32.15 47.14|40.10 38.61 37.66 52.51|43.18 42.78 41.46 55.76|
     { name: 'FREAK-VQA', tool: 62, text: 35, none: 2, hs: -1.0, tg: 4.5 },
   ];
 
-  // Appendix per-dataset critique table (Qwen3-VL-8B, 9,980 failures): domain = unweighted mean over its datasets (Fig. 4a/b)
-  const FAILURE = [{"name": "Counting & Grounding", "fail": 3117, "k": 6, "NC": 13.2, "Wrong": 72.3, "UI": 2.3, "Reas": 5.3, "Label": 7.0, "A": 5.0, "B": 72.8, "C": 1.0, "Y": 14.0, "Z": 7.0}, {"name": "Search & Deep Research", "fail": 1805, "k": 6, "NC": 48.5, "Wrong": 16.2, "UI": 2.8, "Reas": 24.3, "Label": 8.3, "A": 18.5, "B": 14.8, "C": 2.3, "Y": 55.7, "Z": 8.8}, {"name": "General VQA", "fail": 2400, "k": 6, "NC": 36.5, "Wrong": 12.3, "UI": 7.7, "Reas": 39.0, "Label": 4.5, "A": 34.5, "B": 14.0, "C": 2.5, "Y": 43.7, "Z": 5.0}, {"name": "Spatial", "fail": 2658, "k": 5, "NC": 48.8, "Wrong": 5.6, "UI": 5.4, "Reas": 40.0, "Label": 0.4, "A": 24.4, "B": 8.2, "C": 13.0, "Y": 53.8, "Z": 0.4}];
+  // Appendix per-dataset critique table (Qwen3-VL-8B, 9,893 failures): domain = unweighted mean over its datasets (Fig. 4a/b)
+  const FAILURE = [{"name": "Counting & Grounding", "fail": 3030, "k": 5, "NC": 8.9, "Wrong": 75.0, "UI": 2.8, "Reas": 5.3, "Label": 7.9, "A": 6.0, "B": 75.6, "C": 1.0, "Y": 9.4, "Z": 7.9}, {"name": "Search & Deep Research", "fail": 1805, "k": 6, "NC": 48.5, "Wrong": 16.2, "UI": 2.8, "Reas": 24.3, "Label": 8.3, "A": 18.5, "B": 14.8, "C": 2.3, "Y": 55.7, "Z": 8.8}, {"name": "General VQA", "fail": 2400, "k": 6, "NC": 36.5, "Wrong": 12.3, "UI": 7.7, "Reas": 39.0, "Label": 4.5, "A": 34.5, "B": 14.0, "C": 2.5, "Y": 43.7, "Z": 5.0}, {"name": "Spatial", "fail": 2658, "k": 5, "NC": 48.8, "Wrong": 5.6, "UI": 5.4, "Reas": 40.0, "Label": 0.4, "A": 24.4, "B": 8.2, "C": 13.0, "Y": 53.8, "Z": 0.4}];
 
   // Tool calls per (backbone, domain), paper Fig. 7 (appendix). Tool order = TOOL_MIX_TOOLS.
   // micro: every call; inst: each tool counted at most once per question; q: questions in the domain.
@@ -111,7 +110,7 @@ Average|35.99 33.31 32.15 47.14|40.10 38.61 37.66 52.51|43.18 42.78 41.46 55.76|
   // external runs without saved trajectories, so they are absent here. Not part of paper Fig. 7.
   // astra: GPT-6 Astra + OpenVLHarness, counted from every trajectory of its Table 1 runs
   // (same 23 datasets and questions as sol). Not part of paper Fig. 7.
-  const TOOL_MIX = {"8B":{"Counting and Grounding":{"micro":[15881,902,19,2,0,2,6,6,470],"inst":[10047,352,19,2,0,2,6,2,308],"q":10752,"qm":10752},"Visual Search and Deep Research":{"micro":[414,178,123,6,2,1519,701,1019,94],"inst":[210,77,107,6,2,858,670,580,52],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[2344,1462,234,149,82,752,1396,1041,292],"inst":[1789,1157,215,122,81,533,1366,728,181],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[3090,199,2,506,1372,2,0,4,1359],"inst":[1446,146,2,468,1360,2,0,1,670],"q":7080,"qm":7080}},"32B":{"Counting and Grounding":{"micro":[25395,1828,90,4,0,3,18,2,629],"inst":[10597,742,83,4,0,3,18,2,491],"q":10753,"qm":10753},"Visual Search and Deep Research":{"micro":[463,518,427,1,0,1367,783,1526,93],"inst":[267,231,345,1,0,915,733,1023,53],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[2881,3233,1014,183,93,694,1348,1692,470],"inst":[2008,2044,905,181,51,601,1323,1323,417],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[12138,387,12,2357,1882,2,1,0,2956],"inst":[4951,265,11,2000,1874,2,1,0,2379],"q":7080,"qm":7080}},"luna":{"Counting and Grounding":{"micro":[14403,977,3,0,0,0,0,0,644],"inst":[9693,861,3,0,0,0,0,0,536],"q":9725,"qm":9725},"Visual Search and Deep Research":{"micro":[130,334,296,0,0,3451,940,465,24],"inst":[114,202,241,0,0,889,808,357,11],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[1607,1176,257,44,6,776,1071,314,51],"inst":[1538,1083,248,44,6,316,1018,275,30],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[2275,109,4,1020,1808,0,1,0,1085],"inst":[1701,97,4,837,1727,0,1,0,520],"q":7080,"qm":7080}},"sol":{"Counting and Grounding":{"micro":[17241,6795,7,0,0,22,28,8,619],"inst":[9713,3580,7,0,0,8,28,7,242],"q":9725,"qm":9725},"Visual Search and Deep Research":{"micro":[97,582,248,0,0,4928,1062,650,63],"inst":[84,327,232,0,0,1193,843,510,22],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[1948,2118,622,69,0,1594,1140,411,55],"inst":[1878,1827,612,69,0,599,1046,320,28],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[3558,458,8,2032,2087,1,0,0,1283],"inst":[3221,353,6,1785,1969,1,0,0,614],"q":7080,"qm":7080}},"kimi":{"Counting and Grounding":{"micro":[15655,11706,12,1,0,4,7,3,1689],"inst":[10041,3652,10,1,0,3,7,3,822],"q":10750,"qm":10750}},"astra":{"Counting and Grounding":{"micro":[16244,5877,3,0,0,2,6,1,323],"inst":[9724,3826,3,0,0,1,6,1,271],"q":9725,"qm":9725},"Visual Search and Deep Research":{"micro":[152,338,322,0,0,2745,977,668,70],"inst":[138,265,319,0,0,1102,843,508,49],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[2798,1233,868,77,0,892,985,160,23],"inst":[2742,1215,866,77,0,453,917,146,23],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[3737,124,8,1994,2034,0,0,0,543],"inst":[3419,107,7,1856,1991,0,0,0,514],"q":7080,"qm":7080}}};
+  const TOOL_MIX = {"8B":{"Counting and Grounding":{"micro":[15510,889,19,2,0,2,6,6,466],"inst":[9699,341,19,2,0,2,6,2,304],"q":10218,"qm":10218},"Visual Search and Deep Research":{"micro":[414,178,123,6,2,1519,701,1019,94],"inst":[210,77,107,6,2,858,670,580,52],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[2344,1462,234,149,82,752,1396,1041,292],"inst":[1789,1157,215,122,81,533,1366,728,181],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[3090,199,2,506,1372,2,0,4,1359],"inst":[1446,146,2,468,1360,2,0,1,670],"q":7080,"qm":7080}},"32B":{"Counting and Grounding":{"micro":[24919,1818,90,4,0,3,18,2,628],"inst":[10121,734,83,4,0,3,18,2,490],"q":10219,"qm":10219},"Visual Search and Deep Research":{"micro":[463,518,427,1,0,1367,783,1526,93],"inst":[267,231,345,1,0,915,733,1023,53],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[2881,3233,1014,183,93,694,1348,1692,470],"inst":[2008,2044,905,181,51,601,1323,1323,417],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[12138,387,12,2357,1882,2,1,0,2956],"inst":[4951,265,11,2000,1874,2,1,0,2379],"q":7080,"qm":7080}},"luna":{"Counting and Grounding":{"micro":[13885,952,3,0,0,0,0,0,644],"inst":[9179,837,3,0,0,0,0,0,536],"q":9191,"qm":9191},"Visual Search and Deep Research":{"micro":[130,334,296,0,0,3451,940,465,24],"inst":[114,202,241,0,0,889,808,357,11],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[1607,1176,257,44,6,776,1071,314,51],"inst":[1538,1083,248,44,6,316,1018,275,30],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[2275,109,4,1020,1808,0,1,0,1085],"inst":[1701,97,4,837,1727,0,1,0,520],"q":7080,"qm":7080}},"sol":{"Counting and Grounding":{"micro":[16711,6708,7,0,0,22,28,8,619],"inst":[9187,3518,7,0,0,8,28,7,242],"q":9191,"qm":9191},"Visual Search and Deep Research":{"micro":[97,582,248,0,0,4928,1062,650,63],"inst":[84,327,232,0,0,1193,843,510,22],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[1948,2118,622,69,0,1594,1140,411,55],"inst":[1878,1827,612,69,0,599,1046,320,28],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[3558,458,8,2032,2087,1,0,0,1283],"inst":[3221,353,6,1785,1969,1,0,0,614],"q":7080,"qm":7080}},"kimi":{"Counting and Grounding":{"micro":[15200,11491,12,1,0,4,7,3,1687],"inst":[9589,3561,10,1,0,3,7,3,820],"q":10216,"qm":10216}},"astra":{"Counting and Grounding":{"micro":[15699,5805,3,0,0,2,6,1,323],"inst":[9190,3764,3,0,0,1,6,1,271],"q":9191,"qm":9191},"Visual Search and Deep Research":{"micro":[152,338,322,0,0,2745,977,668,70],"inst":[138,265,319,0,0,1102,843,508,49],"q":1705,"qm":1705},"General VQA and Hallucination":{"micro":[2798,1233,868,77,0,892,985,160,23],"inst":[2742,1215,866,77,0,453,917,146,23],"q":5725,"qm":5725},"Spatial Understanding":{"micro":[3737,124,8,1994,2034,0,0,0,543],"inst":[3419,107,7,1856,1991,0,0,0,514],"q":7080,"qm":7080}}};
 
   return { TOOL_MIX_TOOLS, TOOL_MIX, DOMAINS, GROUPS, TABLE, BACKBONES, EFFORTS, EFFORT, HARNESS, ABL_STEPS, ABLATION, REMEDY, FAILURE };
 })();

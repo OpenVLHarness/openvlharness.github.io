@@ -182,11 +182,17 @@ def clip(s, n):
     return s if len(s) <= n else s[:n].rstrip() + ' …'
 
 
+# Datasets no longer reported in the paper; their bundles are skipped.
+EXCLUDED_DATASETS = {'PixmoCount'}
+
+
 def main():
     os.makedirs(IMG_OUT, exist_ok=True)
     examples = []
     for base in sorted(glob.glob(os.path.join(SRC, '*', '*', ''))):
         meta = json.load(open(os.path.join(base, 'meta.json')))
+        if meta.get('dataset') in EXCLUDED_DATASETS:
+            continue
         traj = json.load(open(os.path.join(base, 'trajectory.json')))
         num = meta['example_number']
         eid = f'ex{int(num):02d}' if str(num).isdigit() else str(num)

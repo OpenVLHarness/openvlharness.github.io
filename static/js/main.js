@@ -235,13 +235,13 @@
     const Hh = W < 480 ? 270 : 300;
     const m = { l: 34, r: 40, t: 14, b: 40 };
     const svg = S('svg', { viewBox: `0 0 ${W} ${Hh}`, height: Hh }, el);
-    const x = lin(0, 4.5, m.l, W - m.r);
-    const y = lin(45, 71, Hh - m.b, m.t);
-    [45, 50, 55, 60, 65, 70].forEach(v => {
-      S('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === 45 ? 'base-line' : 'grid-line' }, svg);
-      S('text', { x: m.l - 7, y: y(v) + 4, 'text-anchor': 'end', class: 'ax-label', text: v }, svg);
+    const x = lin(0, 5, m.l, W - m.r);
+    const y = lin(43, 69, Hh - m.b, m.t);
+    [43, 45, 50, 55, 60, 65].forEach(v => {
+      S('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === 43 ? 'base-line' : 'grid-line' }, svg);
+      if (v !== 43) S('text', { x: m.l - 7, y: y(v) + 4, 'text-anchor': 'end', class: 'ax-label', text: v }, svg);
     });
-    [0, 1, 2, 3, 4].forEach(v => S('text', { x: x(v), y: Hh - m.b + 16, 'text-anchor': 'middle', class: 'ax-label', text: v }, svg));
+    [0, 1, 2, 3, 4, 5].forEach(v => S('text', { x: x(v), y: Hh - m.b + 16, 'text-anchor': 'middle', class: 'ax-label', text: v }, svg));
     S('text', { x: (m.l + W - m.r) / 2, y: Hh - 6, 'text-anchor': 'middle', class: 'ax-title', text: 'Cost ($ / 1k questions)' }, svg);
     D.EFFORT.forEach((s, si) => {
       const isOurs = s.key === 'ours';
