@@ -207,13 +207,13 @@
       S('text', { x: cx, y: 15.5, 'text-anchor': 'middle', text: txt }, g);
       // category label (two lines)
       const LBL = gw < 78
-        ? { q8: ['Qwen3', '8B'], q32: ['Qwen3', '32B'], kimi: ['Kimi', 'K3'], gpt5: ['GPT-5', ''], luna: ['GPT-6', 'Luna'], sol: ['GPT-6', 'Sol'] }
-        : { q8: ['Qwen3-VL', '8B'], q32: ['Qwen3-VL', '32B'], kimi: ['Kimi', 'K3'], gpt5: ['GPT-5', ''], luna: ['GPT-6', 'Luna'], sol: ['GPT-6', 'Sol'] };
+        ? { q8: ['Qwen3', '8B'], q32: ['Qwen3', '32B'], kimi: ['Kimi', 'K3'], luna: ['GPT-6', 'Luna'], sol: ['GPT-6', 'Sol'], astra: ['GPT-6', 'Astra'] }
+        : { q8: ['Qwen3-VL', '8B'], q32: ['Qwen3-VL', '32B'], kimi: ['Kimi', 'K3'], luna: ['GPT-6', 'Luna'], sol: ['GPT-6', 'Sol'], astra: ['GPT-6', 'Astra'] };
       const parts = [null, ...(LBL[d.id] || [d.name, ''])];
       const t = S('text', { x: cx, y: Hh - m.b + 17, 'text-anchor': 'middle', class: 'cat-label' }, svg);
       S('tspan', { x: cx, dy: 0, text: parts ? parts[1] : d.name }, t);
       if (parts[2]) S('tspan', { x: cx, dy: 14, text: parts[2], style: 'fill:var(--ink-3)' }, t);
-      const EFF = { kimi: 'max', luna: 'medium', sol: 'medium' };
+      const EFF = { kimi: 'max', luna: 'medium', sol: 'medium', astra: 'medium' };
       if (EFF[d.id]) S('text', { x: cx, y: Hh - m.b + 47, 'text-anchor': 'middle', class: 'ax-label', style: 'font-size:10.5px', text: `(${EFF[d.id]})` }, svg);
       const hit = S('rect', { x: cx - gw / 2, y: m.t, width: gw, height: Hh - m.t - m.b, fill: 'transparent' }, svg);
       hover(hit, `<b>${d.name}</b><br><span class="k">Base</span> ${d.base.toFixed(2)}<br><span class="k">+ OpenVLHarness</span> <b>${d.ours.toFixed(2)}</b> (${txt})`);
@@ -259,7 +259,7 @@
   });
 
   /* ================================================================ INSIGHT 1: dumbbell explorer */
-  let dbGroup = 'sol';
+  let dbGroup = 'astra';
   let dbPrev = null;
   const dbChart = chart($('#dumbbell'), (el, W) => {
     const rowH = 19, domGap = 26;
@@ -341,7 +341,7 @@
     }), { threshold: 0.2 });
     obs.observe(el);
   })();
-  segmented($('#dbSeg'), [['q8', 'Qwen3-VL-8B'], ['q32', '32B'], ['kimi', 'Kimi K3'], ['gpt5', 'GPT-5'], ['luna', 'GPT-6 Luna'], ['sol', 'GPT-6 Sol']], dbGroup, g => {
+  segmented($('#dbSeg'), [['q8', 'Qwen3-VL-8B'], ['q32', '32B'], ['kimi', 'Kimi K3'], ['luna', 'GPT-6 Luna'], ['sol', 'GPT-6 Sol'], ['astra', 'GPT-6 Astra']], dbGroup, g => {
     const from = dbGroup; dbGroup = g; dbPrev = from;
     const el = $('#dumbbell');
     if (REDUCED) return placeDumbbell(el, 1);
@@ -394,7 +394,7 @@
     const COL = { Visual_Grounding: '#1F6F8B', Zoom_In: '#3E8AA3', OCR: '#66A7BB', Depth_Estimation: '#93C3D1', Camera_Trajectory: '#BFDCE5', Text_Search: '#B4530A', Image_Search: '#CE7327', Webpage_Visit: '#E19A5C', Python_Coding_Agent: '#6A2E7A' };
     const DOMS = [['Counting and Grounding', 'Counting & Grounding'], ['Visual Search and Deep Research', 'Search & Deep Research'], ['General VQA and Hallucination', 'General VQA'], ['Spatial Understanding', 'Spatial']];
     const SHOW_KIMI = false; // temporarily hidden; data (counting & grounding only) stays in data.js
-    const MODELS = [['8B', 'Qwen3-VL-8B'], ['32B', 'Qwen3-VL-32B'], ...(SHOW_KIMI ? [['kimi', 'Kimi K3']] : []), ['luna', 'GPT-6 Luna'], ['sol', 'GPT-6 Sol']];
+    const MODELS = [['8B', 'Qwen3-VL-8B'], ['32B', 'Qwen3-VL-32B'], ...(SHOW_KIMI ? [['kimi', 'Kimi K3']] : []), ['luna', 'GPT-6 Luna'], ['sol', 'GPT-6 Sol'], ['astra', 'GPT-6 Astra']];
     let model = '8B', mode = 'micro';
     const fmt = n => n.toLocaleString('en-US');
     function render() {
@@ -764,7 +764,7 @@
   /* ================================================================ RESULTS TABLE */
   (function table() {
     const NAMES = { Base: 'Base', OT: 'OctoTools', VS: 'Visual<br>Sketchpad', CX: 'Codex<br><span class="ver">v0.155.1</span>', Ours: 'Ours' };
-    const ORDER = ['q8', 'q32', 'gpt5', 'kimi', 'luna', 'sol'];
+    const ORDER = ['q8', 'q32', 'kimi', 'luna', 'sol', 'astra'];
     function render() {
       const groups = ORDER.map(id => D.GROUPS.find(g => g.id === id));
       let h = '<thead><tr class="grp"><th class="first" rowspan="2" style="vertical-align:bottom">Dataset</th>';
