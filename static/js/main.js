@@ -224,22 +224,21 @@
   /* ================================================================ HERO: score vs. cost (paper Fig. 1c) */
   const lg = $('#paretoLegend');
   D.EFFORT.forEach(s => lg.appendChild(H('span', {}, `<i style="background:var(${s.color})"></i>${s.name}`)));
-  // effort-label placement per series and point: [dx, dy, anchor]; null = no label. Every OpenVLHarness point is
-  // labelled; the clustered baselines only at their endpoints (low, max), since each curve rises monotonically in cost.
+  // effort-label placement per series and point: [dx, dy, anchor]; every point is labelled (linear cost axis).
   const ELAB = {
-    base: [[0, 16, 'middle'], null, null, null, [8, 12, 'start']],
-    codex: [[9, 4, 'start'], null, null, null, [-6, -9, 'end']],
-    vs: [[0, 16, 'middle'], null, null, null, [0, -10, 'middle']],
-    ours: [[-9, 4, 'end'], [-9, 4, 'end'], [6, 16, 'start'], [0, -10, 'middle'], [9, 4, 'start']],
+    base: [[-8, 4, 'end'], [-4, -9, 'end'], [0, 15, 'middle'], [-4, -9, 'end'], [0, 16, 'middle']],
+    codex: [[8, 4, 'start'], [-8, 4, 'end'], [-8, 2, 'end'], [-4, -12, 'end'], [-6, -8, 'end']],
+    vs: [[0, 16, 'middle'], [4, 14, 'start'], [8, 10, 'start'], [0, -10, 'middle'], [0, -10, 'middle']],
+    ours: [[-9, 4, 'end'], [-9, 4, 'end'], [-4, -9, 'end'], [4, -9, 'start'], [9, 4, 'start']],
   };
   chart($('#heroPareto'), (el, W) => {
     const Hh = W < 480 ? 270 : 300;
     const m = { l: 34, r: 40, t: 14, b: 40 };
     const svg = S('svg', { viewBox: `0 0 ${W} ${Hh}`, height: Hh }, el);
-    // Log-scaled cost axis (as in the paper's Fig. 1c); both ranges follow the data.
+    // Linear cost axis from 0; both ranges follow the data.
     const costs = D.EFFORT.flatMap(s => s.cost), scores = D.EFFORT.flatMap(s => s.score);
-    const cLo = Math.min(...costs) / 1.25, cHi = Math.max(...costs) * 1.2;
-    const x = v => m.l + (Math.log(v) - Math.log(cLo)) / (Math.log(cHi) - Math.log(cLo)) * (W - m.r - m.l);
+    const cHi = Math.ceil(Math.max(...costs));
+    const x = lin(0, cHi, m.l, W - m.r);
     const yLo = Math.floor(Math.min(...scores) - 2), yHi = Math.ceil(Math.max(...scores) + 3);
     const y = lin(yLo, yHi, Hh - m.b, m.t);
     const yTicks = [];
@@ -248,7 +247,7 @@
       S('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === yLo ? 'base-line' : 'grid-line' }, svg);
       if (v !== yLo) S('text', { x: m.l - 7, y: y(v) + 4, 'text-anchor': 'end', class: 'ax-label', text: v }, svg);
     });
-    [0.25, 0.5, 1, 2, 4, 8].filter(v => v >= cLo && v <= cHi)
+    Array.from({ length: cHi + 1 }, (_, i) => i)
       .forEach(v => S('text', { x: x(v), y: Hh - m.b + 16, 'text-anchor': 'middle', class: 'ax-label', text: v }, svg));
     S('text', { x: (m.l + W - m.r) / 2, y: Hh - 6, 'text-anchor': 'middle', class: 'ax-title', text: 'Cost ($ / 1k questions)' }, svg);
     D.EFFORT.forEach((s, si) => {
