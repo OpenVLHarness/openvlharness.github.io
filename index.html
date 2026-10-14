@@ -6,7 +6,7 @@
   <title>OpenVLHarness: Real-World Visual Agentic Tool-Use with Multimodal Memory</title>
   <meta name="description" content="OpenVLHarness: Real-World Visual Agentic Tool-Use with Multimodal Memory. A training-free harness that gives multimodal LLMs a capability layer and persistent multimodal memory.">
   <meta property="og:title" content="OpenVLHarness: Real-World Visual Agentic Tool-Use with Multimodal Memory">
-  <meta property="og:description" content="A capability layer + persistent multimodal memory lifts six MLLM backbones by 9.7–12.7 points across 22 benchmarks.">
+  <meta property="og:description" content="A capability layer + persistent multimodal memory lifts six MLLM backbones by 9.7–12.6 points across 22 benchmarks.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://openvlharness.github.io/">
   <meta property="og:image" content="https://openvlharness.github.io/static/og.jpg">
@@ -15,7 +15,7 @@
   <meta property="og:image:alt" content="OpenVLHarness: average gains across six model families and GPT-6 performance vs. cost">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="OpenVLHarness: Real-World Visual Agentic Tool-Use with Multimodal Memory">
-  <meta name="twitter:description" content="A capability layer + persistent multimodal memory lifts six MLLM backbones by 9.7–12.7 points across 22 benchmarks.">
+  <meta name="twitter:description" content="A capability layer + persistent multimodal memory lifts six MLLM backbones by 9.7–12.6 points across 22 benchmarks.">
   <meta name="twitter:image" content="https://openvlharness.github.io/static/og.jpg">
   <link rel="canonical" href="https://openvlharness.github.io/">
   <script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "OpenVLHarness: Real-World Visual Agentic Tool-Use with Multimodal Memory", "name": "OpenVLHarness", "url": "https://openvlharness.github.io/", "image": "https://openvlharness.github.io/static/og.jpg", "description": "A training-free harness that gives multimodal LLMs a capability layer and persistent multimodal memory; evaluated on 22 benchmarks across six backbones.", "author": [{"@type": "Person", "name": "Yu Zhou", "url": "https://yu-bryan-zhou.github.io/", "affiliation": {"@type": "Organization", "name": "University of California, Los Angeles"}}, {"@type": "Person", "name": "Cheng-Fu Yang", "url": "https://joeyy5588.github.io/", "affiliation": {"@type": "Organization", "name": "University of California, Los Angeles"}}, {"@type": "Person", "name": "Rui Sun", "url": "https://threesr.github.io/", "affiliation": {"@type": "Organization", "name": "University of California, Los Angeles"}}, {"@type": "Person", "name": "Di Wu", "url": "https://xiaowu0162.github.io/", "affiliation": {"@type": "Organization", "name": "University of California, Los Angeles"}}, {"@type": "Person", "name": "Sibo Peng", "url": "https://www.linkedin.com/in/sibo-peng/", "affiliation": {"@type": "Organization", "name": "University of California, Los Angeles"}}, {"@type": "Person", "name": "Mingyang Zhang", "url": "https://www.linkedin.com/in/mingyangzhang24/", "affiliation": {"@type": "Organization", "name": "University of California, Los Angeles"}}, {"@type": "Person", "name": "Zhen Yang", "url": "https://scholar.google.com/citations?user=lhOY0HkAAAAJ", "affiliation": {"@type": "Organization", "name": "Apple"}}, {"@type": "Person", "name": "Ruiyi Zhang", "url": "https://zhangry868.github.io/", "affiliation": {"@type": "Organization", "name": "Apple"}}, {"@type": "Person", "name": "Nanyun Peng", "url": "https://violetpeng.github.io/", "affiliation": {"@type": "Organization", "name": "University of California, Los Angeles"}}, {"@type": "Person", "name": "Zhe Gan", "url": "https://zhegan27.github.io/", "affiliation": {"@type": "Organization", "name": "Apple"}}, {"@type": "Person", "name": "Kai-Wei Chang", "url": "https://web.cs.ucla.edu/~kwchang/", "affiliation": {"@type": "Organization", "name": "University of California, Los Angeles"}}]}</script>
@@ -349,7 +349,7 @@
     <div class="insight wide">
       <div class="ins-text reveal">
         <h3>Per-benchmark gains</h3>
-        <p>Base and OpenVLHarness scores on each of the 22 benchmarks, per backbone. Average improvement over the base model ranges from +9.7 to +12.7 points across six backbones; with GPT-6 Astra, all 22 benchmarks improve.</p>
+        <p>Base and OpenVLHarness scores on each of the 22 benchmarks, per backbone. Average improvement over the base model ranges from +9.7 to +12.6 points across six backbones; with GPT-6 Astra, all 22 benchmarks improve.</p>
       </div>
       <div class="card ins-fig reveal">
         <div class="fig-controls">
@@ -367,7 +367,7 @@
     <div class="insight wide">
       <div class="ins-text reveal">
         <h3>Comparison with other harnesses</h3>
-        <p>Average over 22 benchmarks with the same backbone. GPT-6 Luna: Base 41.6, Visual Sketchpad 41.0, Codex 39.8, OpenVLHarness 54.2. Qwen2.5-VL-7B: AdaReasoner 25.3, PixelReasoner 28.0, DeepEyesV2 25.0 (fine-tuned for tool use); OpenVLHarness 33.5 (original weights).</p>
+        <p>Average over 22 benchmarks with the same backbone. GPT-6 Luna: Base 45.8, Visual Sketchpad 45.6, Codex 43.8, OpenVLHarness 56.5. Qwen2.5-VL-7B: AdaReasoner 25.3, PixelReasoner 28.0, DeepEyesV2 25.0 (fine-tuned for tool use); OpenVLHarness 33.5 (original weights).</p>
       </div>
       <div class="card ins-fig reveal">
         <div class="fig-controls"><div class="seg" id="hcSeg"></div></div>
@@ -476,7 +476,7 @@
 </footer>
 
 <div class="tip" id="tip"></div>
-<script src="static/js/data.js?v=19"></script>
+<script src="static/js/data.js?v=20"></script>
 <script src="static/js/examples.js?v=12"></script>
 <script src="static/js/main.js?v=44"></script>
 <script src="static/js/player.js?v=20"></script>
