@@ -224,24 +224,32 @@
   /* ================================================================ HERO: score vs. cost (paper Fig. 1c) */
   const lg = $('#paretoLegend');
   D.EFFORT.forEach(s => lg.appendChild(H('span', {}, `<i style="background:var(${s.color})"></i>${s.name}`)));
-  // effort-label placement per series and point: [dx, dy, anchor]
+  // effort-label placement per series and point: [dx, dy, anchor]; null = no label. Every OpenVLHarness point is
+  // labelled; the clustered baselines only at their endpoints (low, max), since each curve rises monotonically in cost.
   const ELAB = {
-    base: [[0, -10, 'middle'], [0, 16, 'middle'], [-8, -8, 'end'], [8, 4, 'start']],
-    codex: [[9, 4, 'start'], [-9, 4, 'end'], [-7, -7, 'end'], [0, -10, 'middle']],
-    vs: [[4, 15, 'start'], [0, -8, 'middle'], [8, 14, 'start'], [0, -10, 'middle']],
-    ours: [[0, 18, 'middle'], [-6, -10, 'end'], [0, 18, 'middle'], [9, 4, 'start']],
+    base: [[0, 16, 'middle'], null, null, null, [8, 12, 'start']],
+    codex: [[9, 4, 'start'], null, null, null, [-6, -9, 'end']],
+    vs: [[0, 16, 'middle'], null, null, null, [0, -10, 'middle']],
+    ours: [[-9, 4, 'end'], [-9, 4, 'end'], [6, 16, 'start'], [0, -10, 'middle'], [9, 4, 'start']],
   };
   chart($('#heroPareto'), (el, W) => {
     const Hh = W < 480 ? 270 : 300;
     const m = { l: 34, r: 40, t: 14, b: 40 };
     const svg = S('svg', { viewBox: `0 0 ${W} ${Hh}`, height: Hh }, el);
-    const x = lin(0, 5, m.l, W - m.r);
-    const y = lin(43, 69, Hh - m.b, m.t);
-    [43, 45, 50, 55, 60, 65].forEach(v => {
-      S('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === 43 ? 'base-line' : 'grid-line' }, svg);
-      if (v !== 43) S('text', { x: m.l - 7, y: y(v) + 4, 'text-anchor': 'end', class: 'ax-label', text: v }, svg);
+    // Log-scaled cost axis (as in the paper's Fig. 1c); both ranges follow the data.
+    const costs = D.EFFORT.flatMap(s => s.cost), scores = D.EFFORT.flatMap(s => s.score);
+    const cLo = Math.min(...costs) / 1.25, cHi = Math.max(...costs) * 1.2;
+    const x = v => m.l + (Math.log(v) - Math.log(cLo)) / (Math.log(cHi) - Math.log(cLo)) * (W - m.r - m.l);
+    const yLo = Math.floor(Math.min(...scores) - 2), yHi = Math.ceil(Math.max(...scores) + 3);
+    const y = lin(yLo, yHi, Hh - m.b, m.t);
+    const yTicks = [];
+    for (let v = Math.ceil((yLo + 1) / 5) * 5; v < yHi; v += 5) yTicks.push(v);
+    [yLo, ...yTicks].forEach(v => {
+      S('line', { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v), class: v === yLo ? 'base-line' : 'grid-line' }, svg);
+      if (v !== yLo) S('text', { x: m.l - 7, y: y(v) + 4, 'text-anchor': 'end', class: 'ax-label', text: v }, svg);
     });
-    [0, 1, 2, 3, 4, 5].forEach(v => S('text', { x: x(v), y: Hh - m.b + 16, 'text-anchor': 'middle', class: 'ax-label', text: v }, svg));
+    [0.25, 0.5, 1, 2, 4, 8].filter(v => v >= cLo && v <= cHi)
+      .forEach(v => S('text', { x: x(v), y: Hh - m.b + 16, 'text-anchor': 'middle', class: 'ax-label', text: v }, svg));
     S('text', { x: (m.l + W - m.r) / 2, y: Hh - 6, 'text-anchor': 'middle', class: 'ax-title', text: 'Cost ($ / 1k questions)' }, svg);
     D.EFFORT.forEach((s, si) => {
       const isOurs = s.key === 'ours';
@@ -250,8 +258,11 @@
       s.cost.forEach((c, i) => {
         const cx = x(c), cy = y(s.score[i]);
         S('circle', { cx, cy, r: isOurs ? 5 : 4, class: 'anim-pop', style: `fill:var(${s.color});stroke:var(--surface);stroke-width:2;transition-delay:${400 + si * 150 + i * 110}ms` }, svg);
-        const [dx, dy, an] = ELAB[s.key][i];
-        S('text', { x: cx + dx, y: cy + dy, 'text-anchor': an, class: 'eff-label anim-fade', style: `fill:var(${s.color});transition-delay:${900 + si * 150}ms`, text: D.EFFORTS[i] }, svg);
+        const lab = (ELAB[s.key] || [])[i];
+        if (lab) {
+          const [dx, dy, an] = lab;
+          S('text', { x: cx + dx, y: cy + dy, 'text-anchor': an, class: 'eff-label anim-fade', style: `fill:var(${s.color});transition-delay:${900 + si * 150}ms`, text: D.EFFORTS[i] }, svg);
+        }
         const hit = S('circle', { cx, cy, r: 11, fill: 'transparent' }, svg);
         hover(hit, `<b>${s.name}</b> · ${D.EFFORTS[i]} effort<br>score <b>${s.score[i].toFixed(2)}</b> · $${c.toFixed(2)} / 1k questions`);
       });

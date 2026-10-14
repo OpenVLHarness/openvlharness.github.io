@@ -1,6 +1,6 @@
 /* All numbers transcribed from the paper.
    Table 1 (Qwen3-VL, GPT-6 Luna/Astra), Table 6 (GPT-5, GPT-6 Sol, Kimi K3); 22 datasets, Table 2 (ablation),
-   Table 8 (training-based baselines), Table 12 (reasoning effort), Table 20 (remedy channels). */
+   Table 8 (training-based baselines), Tables 12-13 (reasoning effort, full splits), remedy channels. */
 window.OVH = (function () {
   const DOMAINS = [
     { name: 'Counting & Grounding', short: 'Count & Ground', rows: ['CountQA', 'FSC-147', 'OdinW-13-All', 'FSCD-147', 'FSCD-LVIS'] },
@@ -64,13 +64,13 @@ Average|34.24 31.80 30.49 45.41|38.30 36.79 35.95 50.92|45.76 45.55 43.78 56.52|
     return { id, name: g.name, base: TABLE.Average[id].Base.v, ours: TABLE.Average[id].Ours.v };
   });
 
-  // Table 12: GPT-6 Luna, 11 datasets, reasoning effort medium/high/xhigh/max
-  const EFFORTS = ['medium', 'high', 'xhigh', 'max'];
+  // Paper Table {tab:luna_effort_scaling}: GPT-6 Luna, full splits of all 22 benchmarks, reasoning effort low/medium/high/xhigh/max
+  const EFFORTS = ['low', 'medium', 'high', 'xhigh', 'max'];
   const EFFORT = [
-    { key: 'base', name: 'GPT-6 Luna', color: '--s-base', score: [47.01, 48.01, 52.83, 55.87], cost: [0.65, 0.94, 1.24, 3.14] },
-    { key: 'codex', name: '+ Codex', color: '--s-codex', score: [45.32, 50.57, 53.37, 55.01], cost: [1.34, 1.50, 1.66, 2.59] },
-    { key: 'vs', name: '+ Visual Sketchpad', color: '--s-vs', score: [52.73, 52.48, 53.49, 55.69], cost: [1.84, 2.17, 2.56, 4.53] },
-    { key: 'ours', name: '+ OpenVLHarness', color: '--s-ours', score: [60.43, 64.66, 64.98, 66.76], cost: [0.97, 1.18, 1.45, 2.59] },
+    { key: 'base', name: 'GPT-6 Luna', color: '--s-base', score: [44.31, 45.76, 46.68, 47.33, 48.04], cost: [0.36, 0.58, 0.85, 1.18, 3.17] },
+    { key: 'codex', name: '+ Codex', color: '--s-codex', score: [36.92, 43.78, 45.46, 46.61, 48.58], cost: [1.07, 1.29, 1.47, 1.71, 2.52] },
+    { key: 'vs', name: '+ Visual Sketchpad', color: '--s-vs', score: [44.67, 45.55, 46.86, 47.83, 48.84], cost: [1.55, 1.89, 2.27, 2.72, 5.15] },
+    { key: 'ours', name: '+ OpenVLHarness', color: '--s-ours', score: [49.92, 56.52, 58.16, 58.57, 60.12], cost: [0.64, 0.92, 1.15, 1.45, 2.99] },
   ];
 
   // Harness comparisons (Table 1 averages + Table 8)

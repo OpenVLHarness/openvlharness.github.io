@@ -17,7 +17,8 @@ Search `index.html` for `TODO(`:
 
 Examples gallery: `static/js/examples.js` + `static/examples/` are generated from the `paper_examples` bundles in mini-vlm-toolkit (branch `bryan/sandbox`). Unzip the bundles into one folder and run `python scripts/build_examples.py <folder>` to regenerate.
 
-All chart numbers live in `static/js/data.js` (transcribed from Tables 1, 2, 6, 8, 12, 20 of the paper).
+All chart numbers live in `static/js/data.js` (transcribed from the paper's tables; the effort chart is generated from the
+full-split GPT-6 Luna effort sweep by `luna_full/update_site_effort.py` in OpenVLHarness-release-check).
 After editing CSS/JS, bump the `?v=` query in `index.html` so browsers pick up the change.
 
 Live demo: `static/js/demo.js` is the client; its backend lives in [`demo_server/`](demo_server/README.md) (Gradio app on the released `openvlharness` package, GPU tool budget, launch scripts). Append `?demo_server=<url>` to the page URL to test against another backend.
