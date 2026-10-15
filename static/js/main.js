@@ -175,8 +175,8 @@
   /* ================================================================ HERO: grouped bars */
   chart($('#heroBars'), (el, W) => {
     const data = D.BACKBONES;
-    const Hh = W < 480 ? 250 : 280;
-    const m = { l: 30, r: 6, t: 34, b: 58 };
+    const Hh = W < 480 ? 270 : 300;
+    const m = { l: 30, r: 6, t: 16, b: 58 };
     const svg = S('svg', { viewBox: `0 0 ${W} ${Hh}`, height: Hh }, el);
     const Y0 = 30; // axis starts at 30, as in the paper's Fig. 1a
     const y = lin(Y0, 72, Hh - m.b, m.t);
@@ -200,11 +200,7 @@
         S('text', { x: xb + bw / 2, y: y(d.base) - 5, 'text-anchor': 'middle', class: 'val-label anim-fade', style: `transition-delay:${delay + 700}ms;font-size:10.5px`, text: fmt1(d.base) }, svg);
       }
       S('text', { x: xo + bw / 2, y: y(d.ours) - 5, 'text-anchor': 'middle', class: 'val-label strong anim-fade', style: `transition-delay:${delay + 800}ms;font-size:10.5px`, text: fmt1(d.ours) }, svg);
-      // delta chip row
-      const g = S('g', { class: 'delta-chip anim-fade', style: `transition-delay:${delay + 900}ms` }, svg);
       const txt = '+' + (Math.round((d.ours - d.base) * 10 + 1e-6) / 10).toFixed(1);
-      S('rect', { x: cx - 21, y: 2, width: 42, height: 19, rx: 6 }, g);
-      S('text', { x: cx, y: 15.5, 'text-anchor': 'middle', text: txt }, g);
       // category label (two lines)
       const LBL = gw < 78
         ? { q8: ['Qwen3', '8B'], q32: ['Qwen3', '32B'], kimi: ['Kimi', 'K3'], luna: ['GPT-6', 'Luna'], sol: ['GPT-6', 'Sol'], astra: ['GPT-6', 'Astra'] }
