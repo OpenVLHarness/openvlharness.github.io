@@ -32,7 +32,7 @@ const OPENAI_MODEL = 'gpt-6.1-sol';
 const S = { client: null, base: null, files: [], provider: 'OpenAI', job: null, running: false };
 const R = {
   status: $('#dmStatus'), form: $('#dmForm'), drop: $('#dmDrop'), input: $('#dmFiles'), thumbs: $('#dmThumbs'), samples: $('#dmSamples'),
-  q: $('#dmQ'), prov: $('#dmProv'), baseW: $('#dmBaseW'), baseIn: $('#dmBase'), model: $('#dmModel'), key: $('#dmKey'), serper: $('#dmSerper'),
+  q: $('#dmQ'), prov: $('#dmProv'), baseW: $('#dmBaseW'), compatHelp: $('#dmCompatHelp'), baseIn: $('#dmBase'), model: $('#dmModel'), key: $('#dmKey'), serper: $('#dmSerper'),
   test: $('#dmTest'), testOut: $('#dmTestOut'), run: $('#dmRun'), stop: $('#dmStop'), runNote: $('#dmRunNote'), steps: $('#dmSteps'), meta: $('#dmMeta'),
 };
 
@@ -107,6 +107,7 @@ R.prov.addEventListener('click', e => {
   R.prov.querySelectorAll('button').forEach(x => x.setAttribute('aria-checked', x === b));
   const compat = S.provider === COMPAT;
   R.baseW.hidden = !compat;
+  R.compatHelp.hidden = !compat;
   // OpenAI keeps its default model; a compatible endpoint starts empty (the user names their own server's model)
   if (compat && R.model.value === OPENAI_MODEL) R.model.value = '';
   if (!compat && !R.model.value) R.model.value = OPENAI_MODEL;

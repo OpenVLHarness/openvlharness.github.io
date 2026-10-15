@@ -1,8 +1,10 @@
 # Live demo server
 
-Backend for the project page's interactive demo (`static/js/demo.js`). It runs the released
-[OpenVLHarness](https://github.com/tool-vision/mini-vlm-toolkit/tree/opensource) agent
-(`openvlharness` package) behind a small Gradio app.
+Backend for the project page's interactive demo (`static/js/demo.js`). It runs the
+[OpenVLHarness](https://github.com/uclanlp/OpenVLHarness) agent (`openvlharness` package) behind a
+small Gradio app. Visitors who host their own model can follow
+[Use your own model in the live demo](https://github.com/uclanlp/OpenVLHarness/blob/main/docs/demo_endpoint.md);
+the page links there when *OpenAI-compatible* is selected.
 
 ## How it works
 
@@ -10,7 +12,10 @@ Backend for the project page's interactive demo (`static/js/demo.js`). It runs t
   coding tool, and summarizes text-search results and webpages. The server hosts no language model.
 - **Prompts follow the paper.** Qwen3-VL models (any model name matching `qwen3-vl`) get the paper's
   Qwen prompt, sampling, and answer handling. Every other model gets the generic `openai_v1` prompt.
-  OpenAI models use the Responses API; OpenAI-compatible endpoints use Chat Completions.
+  OpenAI models use the Responses API; OpenAI-compatible endpoints use Chat Completions. A model whose
+  served ID is in the package's model registry (for example `gpt-6.1-sol` or `kimi-k3`) keeps its
+  registered profile. Every model also gets a final text-only request on its last turn, so a run
+  that spends every turn on tools still returns an answer.
 - **The GPU perception tools run on one GPU.** SAM 3, Depth Anything 3 (depth and camera pose) and
   PaddleOCR-VL sit behind one tool router (`configs/router_gpu.yaml`). The router's per-backend
   concurrency gates therefore apply to every visitor.
@@ -27,7 +32,8 @@ The page calls four endpoints; their names and parameters are the contract with 
 | `/start_run` | `message {text, files}, provider, base_url, api_key, model, serper_key` | job id |
 | `/poll` | `job_id` | `{chat: [Gradio chat messages], done}` |
 
-The app also serves a regular Gradio UI at `/`, which the Hugging Face Space embeds.
+The app also serves a plain Gradio UI at `/`. The Hugging Face Space shows the project page's demo
+instead; `scripts/build_space.py` generates it.
 
 ## Sharing one 48 GB GPU
 
@@ -58,7 +64,7 @@ startup.
 `OVH_DEPLOY` is a deployment directory containing:
 
 - `envs/{sam3,da3,vllm,router}`: Python environments. Install the raw services with the
-  installers in `src/openvlharness/services/tools/*/install.sh`. The router environment needs
+  installers in `openvlharness/services/tools/*/install.sh`. The router environment needs
   `openvlharness[server]` and `gradio>=5.30,<6`, which matches the page's `@gradio/client` 1.19.1.
 - `cache/huggingface`: the pinned SAM 3, DA3 and PaddleOCR-VL checkpoints.
 - `logs/`: service logs.
@@ -71,7 +77,8 @@ nohup scripts/run_demo.sh > $OVH_DEPLOY/logs/demo.log 2>&1 &      # demo app :78
 ```
 
 To make the app public, expose port 7860 and put the public URL in the Hugging Face Space page. The
-project page reads the backend URL from the Space page at load time. For local testing, open the
+project page reads the backend URL from the Space page at load time. Also set `DEMO_PUBLIC_URL`
+to that public URL to enable reverse image search (below). For local testing, open the
 project page with `?demo_server=http://127.0.0.1:7860`. Then use `DEMO_ALLOW_PRIVATE_ENDPOINTS=1`
 so the app accepts a local model endpoint. Keep it at `0` in public: endpoints must then be public
 `https` addresses.
@@ -82,7 +89,8 @@ so the app accepts a local model endpoint. Keep it at `0` in public: endpoints m
 | `DEMO_MAX_RUNS` | `4` | Concurrent runs; further runs are refused until a slot frees |
 | `DEMO_MAX_ITERATIONS` | `15` | Agent turns. The last turn is a text-only request for the answer |
 | `DEMO_MAX_IMAGE_SIDE` / `DEMO_MAX_POSE_FRAMES` | `1536` / `4` | GPU memory limits above |
-| `DEMO_IMAGE_SEARCH` | `0` | Reverse image search. The router needs an image upload provider: the built-in image host behind a tunnel (`IMAGE_UPLOAD_PROVIDER=local`) or S3/GCS credentials |
+| `DEMO_PUBLIC_URL` | unset | The app's public URL. When set, reverse image search is enabled: the package's local uploader (`IMAGE_UPLOAD_PROVIDER=local`) writes query images to `DEMO_OUTPUT_DIR/lens`, and this app serves them at `DEMO_PUBLIC_URL/gradio_api/file=…` for Serper Lens. No bucket or separate image host is needed |
+| `DEMO_IMAGE_SEARCH` | `1` | Set to `0` to keep reverse image search off even when `DEMO_PUBLIC_URL` is set |
 | `DEMO_OUTPUT_DIR` | `/tmp/ovh-demo` | Inputs and tool images served to the page |
 
 The coding tool executes model-written Python in a subprocess on the server. Its timeout is not a
