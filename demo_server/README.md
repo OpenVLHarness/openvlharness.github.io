@@ -82,7 +82,7 @@ so the app accepts a local model endpoint. Keep it at `0` in public: endpoints m
 | `DEMO_MAX_RUNS` | `4` | Concurrent runs; further runs are refused until a slot frees |
 | `DEMO_MAX_ITERATIONS` | `15` | Agent turns. The last turn is a text-only request for the answer |
 | `DEMO_MAX_IMAGE_SIDE` / `DEMO_MAX_POSE_FRAMES` | `1536` / `4` | GPU memory limits above |
-| `DEMO_IMAGE_SEARCH` | `0` | Reverse image search. It needs S3 or GCS upload credentials in the app's environment |
+| `DEMO_IMAGE_SEARCH` | `0` | Reverse image search. The router needs an image upload provider: the built-in image host behind a tunnel (`IMAGE_UPLOAD_PROVIDER=local`) or S3/GCS credentials |
 | `DEMO_OUTPUT_DIR` | `/tmp/ovh-demo` | Inputs and tool images served to the page |
 
 The coding tool executes model-written Python in a subprocess on the server. Its timeout is not a
