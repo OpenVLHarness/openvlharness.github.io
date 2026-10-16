@@ -40,9 +40,17 @@ function setStatus(kind, html) { R.status.dataset.k = kind; $('.txt', R.status).
 
 /* ---------------------------------------------------------------- connection */
 async function discover() {
-  // ?demo_server=<url> points the page at another backend (e.g. a local test server)
+  // ?demo_server=<url> points the page at a backend on this machine for local testing. Only localhost is
+  // accepted, so a shared link cannot send a visitor's keys and images to someone else's server.
   const override = new URLSearchParams(location.search).get('demo_server');
-  if (override && /^https?:\/\/[^\s]+$/.test(override)) return override.replace(/\/+$/, '');
+  if (override) {
+    let u = null;
+    try { u = new URL(override); } catch (e) {}
+    if (!u || !/^https?:$/.test(u.protocol) || !['localhost', '127.0.0.1', '[::1]'].includes(u.hostname)) {
+      throw new Error('demo_server must be a localhost URL');
+    }
+    return override.replace(/\/+$/, '');
+  }
   const r = await fetch(SPACE_PAGE, { cache: 'no-store' });
   const m = (await r.text()).match(/https:\/\/[a-z0-9-]+\.trycloudflare\.com/);
   if (!m) throw new Error('no server URL on the Space page');
