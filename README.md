@@ -21,6 +21,6 @@ All chart numbers live in `static/js/data.js` (transcribed from the paper's tabl
 full-split GPT-6 Luna effort sweep by `luna_full/update_site_effort.py` in OpenVLHarness-release-check).
 After editing CSS/JS, bump the `?v=` query in `index.html` so browsers pick up the change.
 
-Live demo: `static/js/demo.js` is the client; its backend lives in [`demo_server/`](demo_server/README.md) (Gradio app on the released `openvlharness` package, GPU tool budget, launch scripts). Append `?demo_server=<url>` to the page URL to test against another backend.
+Live demo: `static/js/demo.js` is the client; its backend lives in [`demo_server/`](demo_server/README.md) (Gradio app on the released `openvlharness` package, GPU tool budget, launch scripts). Append `?demo_server=http://127.0.0.1:7860` to the page URL to test against a local backend (only localhost URLs are accepted).
 
 Hugging Face Space: `python scripts/build_space.py <tunnel-url> <out-dir>` builds the Space page from this page's demo section (same markup, `demo.js`, styles and samples) and records the demo server URL that both pages read; upload `<out-dir>` to the Space after each tunnel restart.
