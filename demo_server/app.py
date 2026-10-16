@@ -52,7 +52,10 @@ OPENAI_BASE = "https://api.openai.com/v1"
 
 ROUTER_URL = os.environ.get("DEMO_TOOL_SERVER_URL", "http://127.0.0.1:8101")
 ALLOW_PRIVATE = os.environ.get("DEMO_ALLOW_PRIVATE_ENDPOINTS", "0") == "1"
-IMAGE_SEARCH = os.environ.get("DEMO_IMAGE_SEARCH", "0") == "1"
+# Public address of this app (the tunnel URL). Reverse image search needs it: Serper Lens fetches
+# query images from the internet, and this app serves them (see the local upload setup below).
+PUBLIC_URL = os.environ.get("DEMO_PUBLIC_URL", "").strip().rstrip("/")
+IMAGE_SEARCH = bool(PUBLIC_URL) and os.environ.get("DEMO_IMAGE_SEARCH", "1") == "1"
 MAX_RUNS = int(os.environ.get("DEMO_MAX_RUNS", "4"))
 MAX_ITERATIONS = int(os.environ.get("DEMO_MAX_ITERATIONS", "15"))
 OUT_DIR = Path(os.environ.get("DEMO_OUTPUT_DIR", "/tmp/ovh-demo")).resolve()
@@ -65,6 +68,13 @@ MAX_SIDE = int(os.environ.get("DEMO_MAX_IMAGE_SIDE", "1536"))
 MAX_POSE_FRAMES = int(os.environ.get("DEMO_MAX_POSE_FRAMES", "4"))
 IMAGE_EXT = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp"}
 OUT_DIR.mkdir(parents=True, exist_ok=True)
+if IMAGE_SEARCH:
+    # The package's local uploader writes query images to a private directory and returns
+    # IMAGE_UPLOAD_PUBLIC_BASE_URL/<content hash>.<ext>. That directory sits inside OUT_DIR, which
+    # Gradio already serves publicly, so no separate image host or bucket is needed.
+    LENS_DIR = OUT_DIR / "lens"
+    os.environ.update(IMAGE_UPLOAD_PROVIDER="local", IMAGE_UPLOAD_LOCAL_DIR=str(LENS_DIR),
+                      IMAGE_UPLOAD_PUBLIC_BASE_URL=f"{PUBLIC_URL}/gradio_api/file={LENS_DIR}")
 
 GPU_CAPABILITIES = {"grounding": "sam3_segment", "ocr": "ocr", "depth": "depth_estimation",
                     "camera_pose": "camera_trajectory", "zoom": "zoom_in_image_by_bbox"}
@@ -101,11 +111,27 @@ def is_qwen3_vl(model):
     return bool(re.search(r"qwen3[-_.]?vl", model.lower()))
 
 
+def _registered_profile(model, adapter):
+    """The registry profile whose served model ID is `model` on this protocol, if any."""
+    from importlib.resources import files
+    import yaml
+    profiles = yaml.safe_load(files("openvlharness.services").joinpath("model_registry.yaml").read_text())["profiles"]
+    for alias, profile in profiles.items():
+        if profile.get("model_id") == model and profile.get("adapter") == adapter:
+            return _registry_load_profile(alias)
+    return None
+
+
 def visitor_model(provider, base_url, api_key, model):
-    """Register a run-private profile and return its services.models entry."""
+    """Register a run-private profile and return its services.models entry.
+
+    A model the registry knows (on the visitor's protocol) keeps its registered profile; others get
+    the closest family profile. Either way Qwen3-VL models get the Qwen prompt and other models get
+    openai_v1, as in the paper presets.
+    """
     alias = f"demo-{uuid.uuid4().hex}"
     if provider == OPENAI:
-        profile = _registry_load_profile("gpt-6-luna")
+        profile = _registered_profile(model, "responses") or _registry_load_profile("gpt-6-luna")
         profile["model_id"] = model
         entry = {"alias": alias, "base": OPENAI_BASE, "key": api_key, "max_tokens": 16000}
         if _is_reasoning_openai(model):
@@ -123,6 +149,9 @@ def visitor_model(provider, base_url, api_key, model):
             profile["allowed_options"] = [o for o in profile["allowed_options"] if o != "return_token_ids"]
             for key in ("raw_trace_format", "raw_trace_tokenizer_revision"):
                 profile.pop(key, None)
+        elif _registered_profile(model, "chat_completions"):
+            # e.g. kimi-k3: its registered prompt, answer handling and allowed options
+            profile = _registered_profile(model, "chat_completions")
         else:
             profile = {"model_id": model, "prompt_bundle": "openai_v1",
                        "adapter": "chat_completions", "final_answer": "answer_tag_or_text",
@@ -427,7 +456,7 @@ def run_job(job, agent, alias, inputs, question):
         result = agent.generate(message, task_id=job.id)
         error = result["extra_records"]["trajectory"].get("error")
         prediction = result.get("prediction")
-        if error or not prediction or prediction == MainAgent.fail_msg:
+        if error or not prediction or prediction in (MainAgent.fail_msg, MainAgent.limit_msg):
             job.add(f"**Answer:** ⚠️ {error or 'The model did not return an answer.'}")
         else:
             job.add(f"**Answer:** {prediction}")
