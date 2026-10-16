@@ -774,7 +774,7 @@
     function render() {
       const groups = ORDER.map(id => D.GROUPS.find(g => g.id === id));
       let h = '<thead><tr class="grp"><th class="first" rowspan="2" style="vertical-align:bottom">Dataset</th>';
-      groups.forEach(g => h += `<th colspan="${g.methods.length}" class="gstart">${g.name}</th>`);
+      groups.forEach(g => h += `<th colspan="${g.methods.length}" class="gstart">${g.name}${g.effort ? `<br><span class="ver">${g.effort} effort</span>` : ''}</th>`);
       h += '</tr><tr class="sub">';
       groups.forEach(g => g.methods.forEach((m, i) => h += `<th class="${i === 0 ? 'gstart' : ''} ${m === 'Ours' ? 'ours' : ''}">${NAMES[m]}</th>`));
       h += '</tr></thead><tbody>';

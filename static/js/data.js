@@ -13,11 +13,11 @@ window.OVH = (function () {
   const GROUPS = [
     { id: 'q8', name: 'Qwen3-VL-8B', methods: ['Base', 'OT', 'VS', 'Ours'], table: 1 },
     { id: 'q32', name: 'Qwen3-VL-32B', methods: ['Base', 'OT', 'VS', 'Ours'], table: 1 },
-    { id: 'luna', name: 'GPT-6 Luna', methods: ['Base', 'VS', 'CX', 'Ours'], table: 1 },
-    { id: 'sol', name: 'GPT-6 Sol', methods: ['Base', 'Ours'], table: 6 },
+    { id: 'luna', name: 'GPT-6 Luna', effort: 'medium', methods: ['Base', 'VS', 'CX', 'Ours'], table: 1 },
+    { id: 'sol', name: 'GPT-6 Sol', effort: 'medium', methods: ['Base', 'Ours'], table: 6 },
     { id: 'gpt5', name: 'GPT-5', methods: ['Base', 'Ours'], table: 6 },
     { id: 'kimi', name: 'Kimi K3', methods: ['Base', 'Ours'], table: 6 },
-    { id: 'astra', name: 'GPT-6 Astra', methods: ['Base', 'Ours'], table: 1 },
+    { id: 'astra', name: 'GPT-6 Astra', effort: 'medium', methods: ['Base', 'Ours'], table: 1 },
   ];
 
   // Raw strings keep the paper's precision. Order: q8(4) q32(4) luna(4) sol(2) gpt5(2) kimi(2) astra(2)

@@ -619,7 +619,7 @@ html.modal-open { overflow: hidden; }
 table.res { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
 table.res th, table.res td { padding: 7px 9px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
 table.res thead th { background: var(--surface-2); font-weight: 600; color: var(--ink-2); font-size: 12px; position: sticky; top: 0; }
-table.res thead tr.grp th { font-family: var(--f-display); font-size: 13px; color: var(--ink); text-align: center; border-left: 1px solid var(--line); }
+table.res thead tr.grp th { font-family: var(--f-display); font-size: 13px; color: var(--ink); text-align: center; vertical-align: top; border-left: 1px solid var(--line); }
 table.res thead tr.sub th { font-family: var(--f-mono); font-size: 11px; font-weight: 500; }
 table.res thead tr.sub th.ours { color: var(--cap); font-weight: 700; }
 table.res th.first, table.res td.first { text-align: left; position: sticky; left: 0; background: var(--surface); z-index: 1; font-weight: 500; color: var(--ink); border-right: 1px solid var(--line); }
