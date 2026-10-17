@@ -398,14 +398,14 @@
     const LBL = { Visual_Grounding: 'Visual Grounding', Zoom_In: 'Zoom-in', OCR: 'OCR', Depth_Estimation: 'Depth', Camera_Trajectory: 'Camera Traj.', Text_Search: 'Text Search', Image_Search: 'Image Search', Webpage_Visit: 'Webpage Visit', Python_Coding_Agent: 'Coding Agent' };
     // paper colors: perception blues, web oranges, coding purple
     const COL = { Visual_Grounding: '#1F6F8B', Zoom_In: '#3E8AA3', OCR: '#66A7BB', Depth_Estimation: '#93C3D1', Camera_Trajectory: '#BFDCE5', Text_Search: '#B4530A', Image_Search: '#CE7327', Webpage_Visit: '#E19A5C', Python_Coding_Agent: '#6A2E7A' };
-    const DOMS = [['Counting and Grounding', 'Counting & Grounding'], ['Visual Search and Deep Research', 'Search & Deep Research'], ['General VQA and Hallucination', 'General VQA'], ['Spatial Understanding', 'Spatial']];
-    const SHOW_KIMI = false; // temporarily hidden; data (counting & grounding only) stays in data.js
+    const DOMS = D.DOMAINS.map(d => d.name);
+    const SHOW_KIMI = false; // temporarily hidden; data (grounded perception only) stays in data.js
     const MODELS = [['8B', 'Qwen3-VL-8B'], ['32B', 'Qwen3-VL-32B'], ...(SHOW_KIMI ? [['kimi', 'Kimi K3']] : []), ['luna', 'GPT-6 Luna'], ['sol', 'GPT-6 Sol'], ['astra', 'GPT-6 Astra']];
     let model = '8B', mode = 'micro';
     const fmt = n => n.toLocaleString('en-US');
     function render() {
-      DOMS.forEach(([dk, dn], di) => {
-        const c = D.TOOL_MIX[model][dk];
+      DOMS.forEach((dn, di) => {
+        const c = D.TOOL_MIX[model][dn];
         const fig = H('figure', { class: 'tm-pie', style: `--d:${di * 110}ms` });
         fig.appendChild(H('figcaption', { class: 'tm-t' }, dn));
         if (!c) { // no saved trajectories for this backbone/domain
@@ -443,20 +443,21 @@
   /* ================================================================ ABLATION TABLE (paper Table 2) */
   (function ablationTable() {
     const el = $('#ablTable'); if (!el) return;
-    const COLS = [['Count & Ground', 'Counting & Grounding'], ['Search', 'Search & Deep Research'], ['General VQA', 'General VQA'], ['Spatial', 'Spatial'], ['Overall', 'Overall']];
+    // short names in the header (fixed-width columns, as in the paper's table); long names in the tooltips
+    const COLS = [...D.DOMAINS.map(d => [d.short, d.name]), ['Overall', 'Overall']];
     const SC = ['8B', '32B'];
     const shade = d => {
       const a = Math.min(1, Math.abs(d) / 8) * 42;            // % of the accent mixed into the cell
       return d >= 0 ? `color-mix(in srgb, var(--cap) ${a}%, transparent)` : `color-mix(in srgb, var(--ev) ${a}%, transparent)`;
     };
-    let t = '<thead><tr><th rowspan="2" class="cfg">Configuration</th>' + COLS.map(([k, n]) => `<th colspan="2" class="dom${k === 'Overall' ? ' ov' : ''}">${n}</th>`).join('') + '</tr><tr>' +
+    let t = '<thead><tr><th rowspan="2" class="cfg">Configuration</th>' + COLS.map(([k, n]) => `<th colspan="2" class="dom${k === 'Overall' ? ' ov' : ''}"${k === n ? '' : ` title="${n}"`}>${k}</th>`).join('') + '</tr><tr>' +
       COLS.map(([k]) => SC.map((s, i) => `<th class="sc${i === 0 ? ' gs' : ''}${k === 'Overall' ? ' ov' : ''}">${s}</th>`).join('')).join('') + '</tr></thead><tbody>';
     D.ABL_STEPS.forEach((step, r) => {
       t += `<tr${r === D.ABL_STEPS.length - 1 ? ' class="full"' : ''}><th class="cfg">${step}</th>`;
-      COLS.forEach(([k]) => SC.forEach((s, i) => {
+      COLS.forEach(([k, n]) => SC.forEach((s, i) => {
         const v = D.ABLATION[s][k][r], prev = r ? D.ABLATION[s][k][r - 1] : null, d = prev == null ? null : v - prev;
         const ds = d == null ? '' : `<span class="d ${d >= 0 ? 'up' : 'dn'}">${d >= 0 ? '+' : '−'}${Math.abs(d).toFixed(1)}</span>`;
-        t += `<td class="${i === 0 ? 'gs' : ''}${k === 'Overall' ? ' ov' : ''}" style="${d == null ? '' : 'background:' + shade(d)}" title="${s} · ${k} · ${step}: ${v.toFixed(2)}${d == null ? '' : ` (${d >= 0 ? '+' : '−'}${Math.abs(d).toFixed(2)})`}"><b>${v.toFixed(1)}</b>${ds}</td>`;
+        t += `<td class="${i === 0 ? 'gs' : ''}${k === 'Overall' ? ' ov' : ''}" style="${d == null ? '' : 'background:' + shade(d)}" title="${s} · ${n} · ${step}: ${v.toFixed(2)}${d == null ? '' : ` (${d >= 0 ? '+' : '−'}${Math.abs(d).toFixed(2)})`}"><b>${v.toFixed(1)}</b>${ds}</td>`;
       }));
       t += '</tr>';
     });
@@ -479,6 +480,7 @@
     ];
     // tiny (phones): row names sit above the bars instead of in a 152px column
     const tiny = W < 480;
+    const LONG = Object.fromEntries(D.DOMAINS.map(d => [d.short, d.name]));
     const rows = D.FAILURE, labW = tiny ? 0 : 152, barH = 24, rowH = tiny ? 50 : 36, top = tiny ? 16 : 0;
     const pw = narrow ? W : (W - 36) / 2;
     const lwOf = pi => (pi === 0 || narrow ? labW : 0);
@@ -508,7 +510,7 @@
           const x0 = sx(acc) + (acc ? 1 : 0), x1 = sx(Math.min(100, acc + v)) - 1;
           const rect = S('rect', { x: x0, y, width: Math.max(1, x1 - x0), height: barH, rx: 3, class: 'anim-hbar', style: `fill:${col};transition-delay:${i * 90 + j * 110}ms` }, svg);
           if (x1 - x0 > 30) S('text', { x: (x0 + x1) / 2, y: y + barH / 2 + 4, 'text-anchor': 'middle', class: 'anim-fade', style: `fill:${tc};font-size:10.5px;font-weight:700;font-family:var(--f-mono);transition-delay:${600 + i * 90}ms`, text: Math.round(v) }, svg);
-          hover(rect, `<b>${r.name}</b> · ${r.k} datasets, ${r.fail.toLocaleString()} failures<br>${lab}: <b>${v.toFixed(1)}%</b>`);
+          hover(rect, `<b>${LONG[r.name] || r.name}</b> · ${r.k} datasets, ${r.fail.toLocaleString()} failures<br>${lab}: <b>${v.toFixed(1)}%</b>`);
           acc += v;
         });
       });
@@ -597,8 +599,8 @@
       web: ['Webpage visit', 'i-web'], code: ['Coding agent', 'i-code'],
     };
     const TAG2CAP = { grounding: 'grounding', zoom: 'zoom', ocr: 'ocr', depth: 'depth', 'camera-trajectory': 'camera', 'text-search': 'tsearch', 'image-search': 'isearch', 'webpage-visit': 'web', code: 'code' };
-    const DOMS = [['all', 'All tasks'], ['count', 'Counting & Grounding'], ['search', 'Search'], ['vqa', 'General VQA'], ['spatial', 'Spatial']];
-    const DOMNAME = Object.fromEntries(DOMS);
+    const DOMS = [['all', 'All tasks', 'All tasks'], ['count', 'Grounding', 'Grounded Perception'], ['search', 'VS & DR', 'Visual Search and Deep Research'], ['vqa', 'General VQA', 'General VQA and Hallucination'], ['spatial', 'Spatial', 'Spatial Reasoning']];
+    const DOMNAME = Object.fromEntries(DOMS.map(([k, , l]) => [k, l]));
     const icon = (k, cls = '') => `<svg class="${cls}" aria-hidden="true"><use href="#${CAPS[k][1]}"/></svg>`;
     EX.forEach(e => { e.caps = e.tags.map(t => TAG2CAP[t]).filter(Boolean); });
 
