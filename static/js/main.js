@@ -370,6 +370,10 @@
     const Hh = m.t + cfg.bars.length * (barH + gap) - gap + m.b;
     const svg = S('svg', { viewBox: `0 0 ${W} ${Hh}`, height: Hh }, el);
     const x = lin(0, 60, m.l, W - m.r);
+    // fine-tuned baselines get diagonal stripes so they don't read as the solid grey Base (no tools) bars
+    const stripe = S('pattern', { id: 'hcStripe', patternUnits: 'userSpaceOnUse', width: 7, height: 7, patternTransform: 'rotate(45)' }, S('defs', {}, svg));
+    S('rect', { width: 7, height: 7, style: 'fill:var(--s-other);opacity:.32' }, stripe);
+    S('rect', { width: 3.5, height: 7, style: 'fill:var(--s-other)' }, stripe);
     [0, 20, 40, 60].forEach(v => {
       S('line', { x1: x(v), x2: x(v), y1: m.t - 4, y2: Hh - m.b + 2, class: v ? 'grid-line' : 'base-line' }, svg);
       S('text', { x: x(v), y: Hh - 8, 'text-anchor': 'middle', class: 'ax-label', text: v }, svg);
@@ -380,8 +384,9 @@
       const ours = name === 'OpenVLHarness';
       S('text', { x: m.l - 10, y: yy + barH / 2 + (tag ? -1 : 4), 'text-anchor': 'end', class: 'cat-label', style: ours ? 'font-weight:700;fill:var(--ink)' : '', text: name }, svg);
       if (tag) S('text', { x: m.l - 10, y: yy + barH / 2 + 12, 'text-anchor': 'end', class: 'ax-label', style: 'font-size:10.5px', text: tag }, svg);
-      const r = S('rect', { x: x(0), y: yy, width: x(v) - x(0), height: barH, rx: 4, class: 'anim-hbar', style: `fill:var(${col});transition-delay:${i * 110}ms` }, svg);
-      S('rect', { x: x(0), y: yy, width: 4, height: barH, class: 'anim-hbar', style: `fill:var(${col});transition-delay:${i * 110}ms` }, svg);
+      const fill = tag === 'fine-tuned' ? 'url(#hcStripe)' : `var(${col})`;
+      const r = S('rect', { x: x(0), y: yy, width: x(v) - x(0), height: barH, rx: 4, class: 'anim-hbar', style: `fill:${fill};transition-delay:${i * 110}ms` }, svg);
+      S('rect', { x: x(0), y: yy, width: 4, height: barH, class: 'anim-hbar', style: `fill:${fill};transition-delay:${i * 110}ms` }, svg);
       S('text', { x: x(v) + 7, y: yy + barH / 2 + 4, class: 'val-label anim-fade' + (ours ? ' strong' : ''), style: `transition-delay:${500 + i * 110}ms`, text: v.toFixed(1) }, svg);
       hover(r, `<b>${name}</b><br>avg ${v.toFixed(2)}${hcSel !== 'q25' && i ? ` · ${sign(v - ref)} vs base` : ''}`);
     });
