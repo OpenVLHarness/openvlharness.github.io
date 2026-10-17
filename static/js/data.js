@@ -16,7 +16,7 @@ window.OVH = (function () {
     { id: 'luna', name: 'GPT-6 Luna', effort: 'medium', methods: ['Base', 'VS', 'CX', 'Ours'], table: 1 },
     { id: 'sol', name: 'GPT-6 Sol', effort: 'medium', methods: ['Base', 'Ours'], table: 6 },
     { id: 'gpt5', name: 'GPT-5', methods: ['Base', 'Ours'], table: 6 },
-    { id: 'kimi', name: 'Kimi K3', methods: ['Base', 'Ours'], table: 6 },
+    { id: 'kimi', name: 'Kimi K3', effort: 'max', methods: ['Base', 'Ours'], table: 6 },
     { id: 'astra', name: 'GPT-6 Astra', effort: 'medium', methods: ['Base', 'Ours'], table: 1 },
   ];
 
