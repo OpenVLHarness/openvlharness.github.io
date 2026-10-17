@@ -278,7 +278,7 @@
 <section class="block" id="playground">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>Interactive demo</h2>
+      <h2>Interactive Demo</h2>
       <p class="lead">The agent loop and perception tools run on our server; your model (OpenAI, or an OpenAI-compatible endpoint with tool calling) orchestrates, writes the coding tool's Python and summarizes web results.</p>
     </div>
     <div class="dm reveal" id="dm">
@@ -332,7 +332,7 @@
 <section class="block" id="results">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>Per-benchmark results</h2>
+      <h2>Per-Benchmark Results</h2>
     </div>
     <div class="tbl-wrap reveal"><table class="res" id="resTable"></table></div>
     <p class="tbl-cap"><b>Bold</b> = best within each backbone group; <span style="text-decoration:underline;text-decoration-color:var(--cap);text-decoration-thickness:2px;text-underline-offset:3px">underline</span> = best across all shown backbones. Qwen3-VL results are means of three runs; GPT-6 and Kimi K3 results are single runs. GPT-6 models use medium reasoning effort and Kimi K3 uses max. GPT-6 Sol and Kimi K3 are from the appendix (Table 7). OdinW-13-All asks for all categories of an image's source dataset in one query.</p>
@@ -349,7 +349,7 @@
     <!-- 1 -->
     <div class="insight wide">
       <div class="ins-text reveal">
-        <h3>Per-benchmark gains</h3>
+        <h3>Per-Benchmark Gains</h3>
         <p>Base and OpenVLHarness scores on each of the 22 benchmarks, per backbone. Average improvement over the base model ranges from +9.7 to +12.6 points across six backbones; with GPT-6 Astra, all 22 benchmarks improve.</p>
       </div>
       <div class="card ins-fig reveal">
@@ -367,7 +367,7 @@
     <!-- 2 -->
     <div class="insight wide">
       <div class="ins-text reveal">
-        <h3>Comparison with other harnesses</h3>
+        <h3>Comparison with Other Harnesses</h3>
         <p>Average over 22 benchmarks with the same backbone. GPT-6 Luna: Base 45.8, Visual Sketchpad 45.6, Codex 43.8, OpenVLHarness 56.5. Qwen2.5-VL-7B: AdaReasoner 25.3, PixelReasoner 28.0, DeepEyesV2 25.0 (fine-tuned for tool use); OpenVLHarness 33.5 (original weights).</p>
       </div>
       <div class="card ins-fig reveal">
@@ -379,7 +379,7 @@
 
     <div class="insight wide">
       <div class="ins-text reveal">
-        <h3>Component-wise ablation</h3>
+        <h3>Component-Wise Ablation</h3>
         <p>Components added cumulatively to the no-tool baseline, Qwen3-VL-8B and 32B. Each cell shows the score and its change from the row above.</p>
       </div>
       <div class="card abl-card reveal">
@@ -390,7 +390,7 @@
 
     <div class="insight wide">
       <div class="ins-text reveal">
-        <h3>Tool usage by domain</h3>
+        <h3>Tool Usage by Domain</h3>
         <p>Share of tool calls in each domain, per backbone, over all evaluated questions. Micro counts every call; per-instance counts each tool at most once per question. Totals are given below each panel.</p>
       </div>
       <div class="card ins-fig tm-card reveal">
@@ -408,17 +408,17 @@
 <section class="block" id="optimization">
   <div class="wrap">
     <div class="sec-head reveal">
-      <h2>Harness optimization</h2>
+      <h2>Harness Optimization</h2>
       <p class="lead">Kimi K3 critiques 9,893 failed Qwen3-VL-8B trajectories and assigns each a root cause and a remedy channel: new task-specific tools (A–C), harness text (Y), or none (Z). The dominant channel selects the workflow. Harness search edits the system prompt, tool descriptions, and output templates; tool generation composes existing capabilities into new tools. Both are run by a coding agent with model weights fixed.</p>
     </div>
 
     <div class="card op-fig reveal">
-      <div class="chart-title">Failure causes and remedy channels by domain <span class="chart-sub">Qwen3-VL-8B · 9,893 failures · unweighted mean over datasets per domain</span></div>
+      <div class="chart-title">Failure Causes and Remedy Channels by Domain <span class="chart-sub">Qwen3-VL-8B · 9,893 failures · unweighted mean over datasets per domain</span></div>
       <div class="chart" id="failDomain" role="img" aria-label="Stacked bars of failure causes and remedy channels for four task domains"></div>
     </div>
 
     <div class="card op-fig reveal">
-      <div class="chart-title">Remedy profiles and specialization gains <span class="chart-sub">Qwen3-VL-8B · gains over the unoptimized harness</span></div>
+      <div class="chart-title">Remedy Profiles and Specialization Gains <span class="chart-sub">Qwen3-VL-8B · gains over the unoptimized harness</span></div>
       <div class="legend">
         <span><i style="background:var(--cap)"></i>New task-specific tools (A+B+C)</span>
         <span><i style="background:var(--ev)"></i>Harness text (Y)</span>
