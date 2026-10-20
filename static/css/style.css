@@ -1442,25 +1442,7 @@ table.res thead tr.sub th { font-size: 12px; letter-spacing: -0.01em; }
 #methodFig .be-coder .brain-ic.bi { width: 16px; height: 16px; margin: 0; }
 #methodFig .be-coder small { color: var(--ev); opacity: .85; }
 
-/* hero video: the launch film under the buttons. The film is dark in both themes, so its frame and
-   play pill use fixed dark colors. Until the first play a pill (and the whole poster) starts it;
-   after that the native controls take over. */
-.hero-video { position: relative; max-width: 1040px; margin: 0 auto; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: #0b0d12; border: 1px solid var(--line); box-shadow: var(--shadow); }
+/* hero video: the launch film under the buttons, autoplaying muted on a loop (browsers only autoplay
+   muted video; the native controls unmute it). The film is dark in both themes, so its frame is too. */
+.hero-video { position: relative; max-width: 100%; margin: 0 auto; /* full content width, as wide as the charts below */ aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; background: #0b0d12; border: 1px solid var(--line); box-shadow: var(--shadow); }
 .hero-video video { display: block; width: 100%; height: 100%; object-fit: contain; background: #0b0d12; }
-.hv-play { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: flex-start; padding: 22px 24px; background: none; border: 0; cursor: pointer; }
-.hv-play[hidden] { display: none; }
-.hv-pill { display: inline-flex; align-items: center; gap: 10px; padding: 7px 16px 7px 7px; border-radius: 999px; background: rgba(15, 17, 21, .74); border: 1px solid rgba(238, 240, 244, .18); color: #eef0f4; font: 600 15px var(--f-body); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: transform .15s ease, background .2s; }
-.hv-play:hover .hv-pill { transform: translateY(-1px); background: rgba(15, 17, 21, .9); }
-.hv-play:focus-visible { outline: none; }
-.hv-play:focus-visible .hv-pill { outline: 2px solid #7c9ff0; outline-offset: 3px; }
-.hv-ic { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; background: #5782e0; color: #fff; }
-.hv-ic svg { width: 15px; height: 15px; margin-left: 2px; }
-.hv-dur { font: 500 12.5px var(--f-mono); color: rgba(238, 240, 244, .62); }
-@media (max-width: 640px) {
-  .hv-play { padding: 8px 10px; }
-  .hv-pill { gap: 7px; padding: 4px 11px 4px 4px; font-size: 12.5px; }
-  .hv-ic { width: 24px; height: 24px; }
-  .hv-ic svg { width: 11px; height: 11px; }
-  .hv-dur { font-size: 10.5px; }
-  .hv-lbl { display: none; } /* phones: icon + duration only, so the pill stays off the poster's task cards */
-}
