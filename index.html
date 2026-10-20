@@ -40,7 +40,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="static/css/style.css?v=82">
+  <link rel="stylesheet" href="static/css/style.css?v=83">
   <script>
     // dark by default; a stored choice (light or dark) wins
     try { var t = localStorage.getItem('ovh-theme'); document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : 'dark'); } catch (e) {}
@@ -89,6 +89,7 @@
       OpenVLHarness
     </a>
     <div class="nav-links">
+      <a href="#highlights">Highlights</a>
       <a href="#method">Architecture</a>
       <a href="#playground">Demo</a>
       <a href="#results">Results</a>
@@ -139,6 +140,21 @@
       <a class="btn" href="#playground"><svg><use href="#i-play"/></svg>Demo</a>
     </div>
 
+    <figure class="hero-video">
+      <video id="heroVideo" controls playsinline preload="metadata" poster="static/video/launch_poster.jpg?v=1" aria-label="OpenVLHarness launch video (1:46)">
+        <source src="static/video/openvlharness_launch.mp4?v=1" type="video/mp4">
+      </video>
+      <button type="button" class="hv-play" id="heroVideoPlay" aria-label="Play the launch video" hidden><span class="hv-pill"><span class="hv-ic"><svg><use href="#i-play"/></svg></span><span class="hv-lbl">Watch the video</span><span class="hv-dur">1:46</span></span></button>
+    </figure>
+  </div>
+</header>
+
+<!-- ============ highlights ============ -->
+<section class="block" id="highlights">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <h2>Performance Highlights</h2>
+    </div>
     <div class="hero-charts">
       <div class="card chart-card reveal">
         <div class="chart-title">Gains Across Model Families <span class="chart-sub">Average over 22 benchmarks · Base vs. + OpenVLHarness</span></div>
@@ -155,7 +171,7 @@
       </div>
     </div>
   </div>
-</header>
+</section>
 
 <!-- ============ method ============ -->
 <section class="block" id="method">
@@ -496,7 +512,7 @@
 <div class="tip" id="tip"></div>
 <script src="static/js/data.js?v=24"></script>
 <script src="static/js/examples.js?v=12"></script>
-<script src="static/js/main.js?v=48"></script>
+<script src="static/js/main.js?v=49"></script>
 <script src="static/js/player.js?v=21"></script>
 <script type="module" src="static/js/demo.js?v=16"></script>
 </body>

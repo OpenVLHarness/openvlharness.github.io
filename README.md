@@ -14,6 +14,8 @@ python3 -m http.server 8765   # then open http://localhost:8765
 
 The publication links, citation metadata, and BibTeX are in `index.html`.
 
+Launch video (top of the page): `static/video/openvlharness_launch.mp4` is the launch film (v10, dark, 1080p60, from the private tool-vision/video repo) and `static/video/launch_poster.jpg` its frame at 6.5 s. To swap in a new cut, replace both files and bump their `?v=` in `index.html`.
+
 Examples gallery: `static/js/examples.js` + `static/examples/` are generated from the `paper_examples` bundles in mini-vlm-toolkit (branch `bryan/sandbox`). Unzip the bundles into one folder and run `python scripts/build_examples.py <folder>` to regenerate.
 
 All chart numbers live in `static/js/data.js` (transcribed from the paper's tables; the effort chart is generated from the

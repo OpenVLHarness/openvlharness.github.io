@@ -823,6 +823,16 @@
     setTimeout(() => s.textContent = 'Copy', 1600);
   });
 
+  /* ================================================================ hero video */
+  // Native controls stay in the markup (no-JS fallback); with JS the poster shows a play pill until the first play.
+  const hv = $('#heroVideo'), hvPlay = $('#heroVideoPlay');
+  if (hv && hvPlay) {
+    const started = () => { hvPlay.hidden = true; hv.controls = true; };
+    if (hv.paused && hv.currentTime === 0) { hv.controls = false; hvPlay.hidden = false; }
+    hvPlay.addEventListener('click', () => { started(); hv.play().catch(() => {}); });
+    hv.addEventListener('play', started);
+  }
+
   /* ================================================================ reveal + nav highlight */
   $$('.reveal').forEach(e => io.observe(e));
   charts.forEach(c => io.observe(c.el));
