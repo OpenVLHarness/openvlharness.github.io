@@ -1,6 +1,6 @@
 # openvlharness.github.io
 
-Project page for **OpenVLHarness: Real-World Visual Agentic Tool-Use with Multimodal Memory**.
+Project page for **OpenVLHarness: Real World Visual Agentic Tool-Use with Multimodal Memory**.
 
 Plain static site (no build step): `index.html`, `static/css/style.css`, `static/js/{data,main}.js`, images in `static/images/`.
 
