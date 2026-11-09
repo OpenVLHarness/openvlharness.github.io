@@ -29,6 +29,7 @@
   --on-accent: #ffffff;
   --rose: #c9520e;
   --hot: #dc2f2a;   /* Hugging Face "Top 3" chip; same red in both themes, white text */
+  --star: #c99a06;  /* GitHub star on the Code button */
 
   /* chart series (entity-bound, never re-ordered) */
   --s-ours: #2653c1;
@@ -74,6 +75,7 @@
   --mem-soft: rgba(224, 112, 159, 0.14);
   --on-accent: #0f1115;
   --rose: #f28a4c;
+  --star: #e3b341;
   --s-ours: #5782e0;
   --s-base: #6b7380;
   --s-codex: #e1712d;
@@ -204,9 +206,9 @@ p { margin: 0 0 1em; }
 .btn.primary:hover { border-color: var(--ink); }
 .btn .soon { font-family: var(--f-mono); font-size: 10.5px; font-weight: 500; color: var(--ink-3); border-left: 1px solid var(--line-2); padding-left: 8px; }
 .btn.primary .soon { color: color-mix(in srgb, var(--bg) 65%, transparent); border-color: color-mix(in srgb, var(--bg) 30%, transparent); }
-.btn.hot { border-color: color-mix(in srgb, var(--hot) 60%, transparent); }
-.btn.hot:hover { border-color: var(--hot); }
 .btn .rank { font-size: 12.5px; font-weight: 700; letter-spacing: 0.01em; color: #ffffff; background: var(--hot); padding: 3px 10px; border-radius: 999px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--hot) 22%, transparent); margin-left: 2px; white-space: nowrap; }
+.btn .stars { display: inline-flex; align-items: center; gap: 4px; font-size: 12.5px; font-weight: 600; color: var(--ink-2); background: var(--surface-2); border: 1px solid var(--line); padding: 2px 8px 2px 6px; border-radius: 999px; margin-left: 2px; font-variant-numeric: tabular-nums; }
+.btn .stars svg { width: 13px; height: 13px; color: var(--star); }
 
 /* hero charts */
 .hero-charts { display: grid; grid-template-columns: 1.1fr 1fr; gap: 18px; text-align: left; }

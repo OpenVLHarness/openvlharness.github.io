@@ -832,4 +832,18 @@
     navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
   }), { rootMargin: '-45% 0px -50% 0px' });
   navLinks.forEach(a => { const sec = $(a.getAttribute('href')); if (sec) navObs.observe(sec); });
+
+  /* ================================================================ GitHub stars on the Code button */
+  // index.html carries a recent count; replace it with the live one when the API answers (60 requests/h per visitor IP).
+  const starEl = $('#ghStars');
+  if (starEl && window.fetch) {
+    fetch('https://api.github.com/repos/uclanlp/OpenVLHarness')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        const n = d && d.stargazers_count;
+        if (!Number.isFinite(n)) return;
+        starEl.textContent = n < 1000 ? String(n) : (n / 1000).toFixed(n < 10000 ? 1 : 0).replace(/\.0$/, '') + 'k';
+      })
+      .catch(() => {});
+  }
 })();
