@@ -151,6 +151,9 @@ p { margin: 0 0 1em; }
   padding: 5px 12px; border-radius: 999px; margin-bottom: 26px;
 }
 .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cap); box-shadow: 0 0 0 3px var(--cap-soft); }
+.eyebrow svg { width: 15px; height: 15px; flex: none; }
+a.eyebrow { text-decoration: none; margin-bottom: 42px; transition: border-color .2s, color .2s; }
+a.eyebrow:hover { border-color: var(--ink-3); color: var(--ink); }
 
 .title-box { position: relative; display: inline-block; padding: 10px 22px 12px; margin-bottom: 14px; }
 .title-box h1 {
