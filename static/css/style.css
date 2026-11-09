@@ -28,6 +28,7 @@
   --mem-soft: rgba(168, 58, 109, 0.10);
   --on-accent: #ffffff;
   --rose: #c9520e;
+  --hot: #dc2f2a;   /* Hugging Face "Top 3" chip; same red in both themes, white text */
 
   /* chart series (entity-bound, never re-ordered) */
   --s-ours: #2653c1;
@@ -203,7 +204,9 @@ p { margin: 0 0 1em; }
 .btn.primary:hover { border-color: var(--ink); }
 .btn .soon { font-family: var(--f-mono); font-size: 10.5px; font-weight: 500; color: var(--ink-3); border-left: 1px solid var(--line-2); padding-left: 8px; }
 .btn.primary .soon { color: color-mix(in srgb, var(--bg) 65%, transparent); border-color: color-mix(in srgb, var(--bg) 30%, transparent); }
-.btn .rank { font-size: 11.5px; font-weight: 700; letter-spacing: 0.01em; color: var(--cap); background: var(--cap-soft); border: 1px solid color-mix(in srgb, var(--cap) 35%, transparent); padding: 2px 7px; border-radius: 999px; margin-left: -1px; }
+.btn.hot { border-color: color-mix(in srgb, var(--hot) 60%, transparent); }
+.btn.hot:hover { border-color: var(--hot); }
+.btn .rank { font-size: 12.5px; font-weight: 700; letter-spacing: 0.01em; color: #ffffff; background: var(--hot); padding: 3px 10px; border-radius: 999px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--hot) 22%, transparent); margin-left: 2px; white-space: nowrap; }
 
 /* hero charts */
 .hero-charts { display: grid; grid-template-columns: 1.1fr 1fr; gap: 18px; text-align: left; }
