@@ -151,9 +151,22 @@ p { margin: 0 0 1em; }
   padding: 5px 12px; border-radius: 999px; margin-bottom: 26px;
 }
 .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cap); box-shadow: 0 0 0 3px var(--cap-soft); }
-.eyebrow svg { width: 15px; height: 15px; flex: none; }
-a.eyebrow { text-decoration: none; margin-bottom: 42px; transition: border-color .2s, color .2s; }
-a.eyebrow:hover { border-color: var(--ink-3); color: var(--ink); }
+/* Hugging Face Daily Papers rank, above the title */
+.hf-badge {
+  display: inline-flex; align-items: center; gap: 9px; margin-bottom: 40px;
+  font-family: var(--f-display); font-size: 16px; font-weight: 500; letter-spacing: -0.005em; text-decoration: none;
+  color: var(--cap); background: var(--cap-soft); border: 1px solid color-mix(in srgb, var(--cap) 45%, transparent);
+  padding: 8px 18px 8px 14px; border-radius: 999px; transition: transform .15s ease, border-color .2s;
+}
+.hf-badge:hover { transform: translateY(-1px); border-color: var(--cap); }
+.hf-badge b { font-weight: 700; }
+.hf-badge svg { width: 20px; height: 20px; flex: none; }
+.hf-badge .arr { opacity: .75; }
+@media (max-width: 640px) {
+  .hf-badge { font-size: 13.5px; gap: 7px; padding: 7px 14px 7px 12px; margin-bottom: 34px; }
+  .hf-badge svg { width: 18px; height: 18px; }
+  .hf-badge .arr { display: none; }
+}
 
 .title-box { position: relative; display: inline-block; padding: 10px 22px 12px; margin-bottom: 14px; }
 .title-box h1 {
