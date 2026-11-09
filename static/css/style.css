@@ -202,6 +202,7 @@ p { margin: 0 0 1em; }
 }
 .btn:hover { transform: translateY(-1px); border-color: var(--ink-3); }
 .btn svg { width: 17px; height: 17px; }
+.btn svg.logo { width: 21px; height: 21px; margin: -2px 0; }
 .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .btn.primary:hover { border-color: var(--ink); }
 .btn .soon { font-family: var(--f-mono); font-size: 10.5px; font-weight: 500; color: var(--ink-3); border-left: 1px solid var(--line-2); padding-left: 8px; }
