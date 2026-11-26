@@ -187,12 +187,12 @@ p { margin: 0 0 1em; }
 .authors a { color: var(--ink); text-decoration: none; border-bottom: 1px dashed var(--line-2); }
 .authors sup { color: var(--ink-3); }
 .affils { display: flex; justify-content: center; align-items: center; gap: 10px 22px; flex-wrap: wrap;
-  font-size: 15px; color: var(--ink-2); margin: 12px 0 26px; }
+  font-size: 15px; color: var(--ink-2); margin: 12px 0 6px; }
 .affils .aff { display: inline-flex; align-items: center; gap: 8px; }
 .affils img { width: 30px; height: 30px; border-radius: 6px; object-fit: cover; }
 .affils .aff-apple { width: 30px; height: 23px; fill: var(--ink); }
 .affils sup { font-size: 0.65em; color: var(--ink-3); }
-.affils .eq { font-size: 13px; color: var(--ink-3); }
+.hero .eq { font-size: 12.5px; color: var(--ink-3); margin: 0 0 26px; }
 .placeholder-note {
   display: inline-block; font-family: var(--f-mono); font-size: 11px; color: var(--ev);
   border: 1px dashed var(--ev); border-radius: 6px; padding: 1px 7px; margin-left: 6px; vertical-align: 2px;
